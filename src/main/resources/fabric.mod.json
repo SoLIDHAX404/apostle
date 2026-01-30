@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "apostle",
+  "version": "${version}",
+
+  "name": "apostle",
+  "description": "",
+  "authors": [],
+  "contact": {},
+
+  "license": "BSD-3-Clause",
+  "icon": "assets/apostle/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": ["org.solidhax.apostle.client.ApostleDataGenerator"],
+    "client": ["org.solidhax.apostle.client.ApostleClient"],
+    "main": ["org.solidhax.apostle.Apostle"]
+  },
+
+  "mixins": [
+    "apostle.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-language-kotlin": ">=${kotlin_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
