@@ -1,36 +1,40 @@
 name: build
-on: [ pull_request, push ]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 21 ]
+        java: [21]
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-      - name: validate gradle wrapper
+      - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
 
-      - name: setup jdk ${{ matrix.java }}
-        uses: actions/setup-java@v3
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
         with:
           distribution: 'corretto'
           java-version: ${{ matrix.java }}
 
-      - name: setup gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: make gradle wrapper executable
+      - name: Make Gradle Wrapper Executable
         run: chmod +x ./gradlew
 
-      - name: build
+      - name: Build
         run: ./gradlew build
 
-      - name: capture build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Capture Build Artifacts
+        uses: actions/upload-artifact@v5
         with:
           name: Artifacts
           path: build/libs/
