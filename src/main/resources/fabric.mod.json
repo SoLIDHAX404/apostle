@@ -13,9 +13,7 @@
 
   "environment": "client",
   "entrypoints": {
-    "fabric-datagen": ["org.solidhax.apostle.client.ApostleDataGenerator"],
-    "client": ["org.solidhax.apostle.client.ApostleClient"],
-    "main": ["org.solidhax.apostle.Apostle"]
+    "client": ["org.solidhax.apostle.Apostle"]
   },
 
   "mixins": [

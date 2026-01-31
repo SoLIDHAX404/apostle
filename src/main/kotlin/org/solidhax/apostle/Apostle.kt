@@ -1,9 +1,9 @@
 package org.solidhax.apostle
 
-import net.fabricmc.api.ModInitializer
+import net.fabricmc.api.ClientModInitializer
 
-class Apostle : ModInitializer {
+class Apostle : ClientModInitializer {
 
-    override fun onInitialize() {
+    override fun onInitializeClient() {
     }
 }
