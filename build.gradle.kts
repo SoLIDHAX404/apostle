@@ -45,6 +45,16 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
+
+    property("minecraft_lwjgl_version").let { lwjglVersion ->
+        modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
+        include("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
+
+        listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
+            modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
+            include("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
+        }
+    }
 }
 
 tasks.processResources {
