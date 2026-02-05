@@ -53,10 +53,10 @@ object NVGRenderer {
         drawing = false
     }
 
-    fun rect(x: Float, y: Float, w: Float, h: Float, color: Int, radius: Float) {
+    fun rect(x: Float, y: Float, w: Float, h: Float, color: Color, radius: Float) {
         nvgBeginPath(vg)
         nvgRoundedRect(vg, x, y, w, h + .5f, radius)
-        nvgRGBAf(0f, 0.5f, 1f, 1f, nvgColor)
+        nvgRGBA(color.redB(), color.greenB(), color.blueB(), color.alphaB(), nvgColor)
         nvgFillColor(vg, nvgColor)
         nvgFill(vg)
     }
