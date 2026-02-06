@@ -32,6 +32,7 @@ fabricApi {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 }
 
@@ -45,6 +46,11 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
+
+    property("commodore_version").let {
+        implementation("com.github.stivais:Commodore:$it")
+        include("com.github.stivais:Commodore:$it")
+    }
 
     property("minecraft_lwjgl_version").let { lwjglVersion ->
         modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")

@@ -61,6 +61,14 @@ object NVGRenderer {
         nvgFill(vg)
     }
 
+    fun circle(x: Float, y: Float, radius: Float, color: Color) {
+        nvgBeginPath(vg)
+        nvgCircle(vg, x, y, radius)
+        nvgRGBA(color.redB(), color.greenB(), color.blueB(), color.alphaB(), nvgColor)
+        nvgFillColor(vg, nvgColor)
+        nvgFill(vg)
+    }
+
     private class Scissor(val previous: Scissor?, val x: Float, val y: Float, val maxX: Float, val maxY: Float) {
         fun applyScissor() {
             if (previous == null) nvgScissor(vg, x, y, maxX - x, maxY - y)

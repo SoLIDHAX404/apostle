@@ -1,23 +1,30 @@
 package org.solidhax.apostle
 
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
-import org.solidhax.apostle.event.KeyPressEvent
-import org.solidhax.apostle.event.impl.subscribe
+import net.minecraft.client.Minecraft
+import org.solidhax.apostle.commands.mainCommand
 import org.solidhax.apostle.modules.impl.ModuleManager
-import org.solidhax.apostle.modules.render.Searchbar
-import org.solidhax.apostle.utils.render.NVGRenderer
 import org.solidhax.apostle.utils.render.NVGSpecialRenderer
+import org.solidhax.apostle.utils.scheduler.TickScheduler
 
 class Apostle : ClientModInitializer {
 
     override fun onInitializeClient() {
         SpecialGuiElementRegistry.register { context -> NVGSpecialRenderer(context.vertexConsumers()) }
+        ClientCommandRegistrationCallback.EVENT.register{ dispatcher, _ ->
+            arrayOf(mainCommand).forEach { command -> command.register(dispatcher) }
+        }
 
-        listOf(Searchbar).forEach { ModuleManager.register(it) }
+        ModuleManager.init()
+        TickScheduler.init()
     }
 
     companion object {
         const val MOD_ID = "apostle"
+
+        @JvmStatic
+        val mc = Minecraft.getInstance()
     }
 }
