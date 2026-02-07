@@ -2,21 +2,22 @@ package org.solidhax.apostle.gui.clickgui.components
 
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.input.MouseButtonEvent
-import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.utils.mouse.cursorX
 import org.solidhax.apostle.utils.mouse.cursorY
 import org.solidhax.apostle.utils.render.Colors
 import org.solidhax.apostle.utils.render.NVGRenderer
 
-class UIWindow(x: Float, y: Float, width: Float, height: Float, val title: String) : UIComponent(null, x, y, width, height) {
+class UIWindow(x: Float, y: Float, width: Float, height: Float, val title: String) : UIComponent(x, y, width, height) {
     private val children = mutableListOf<UIComponent>()
-
-    private val headerWidth = width
-    private val headerHeight = height / 10
 
     private var dragOffsetX = 0f
     private var dragOffsetY = 0f
     private var dragging = false
+
+    fun addChild(component: UIComponent) {
+        component.parent = this
+        children.add(component)
+    }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
 
@@ -26,9 +27,9 @@ class UIWindow(x: Float, y: Float, width: Float, height: Float, val title: Strin
         }
 
         NVGRenderer.filledRect(x, y, width, height, Colors.UI_BACKGROUND, 5f)
-        NVGRenderer.rect(x - 1, y - 1, width + 1, height + 1, 2f, Colors.UI_SURFACE, 5f)
+        NVGRenderer.rect(x, y, width, height, 2f, Colors.UI_SURFACE, 5f)
 
-        super.render(guiGraphics, mouseX, mouseY, delta)
+        children.forEach { it.render(guiGraphics, mouseX, mouseY, delta) }
     }
 
     override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {
@@ -41,13 +42,13 @@ class UIWindow(x: Float, y: Float, width: Float, height: Float, val title: Strin
             }
         }
 
-        super.mouseClicked(mouseButtonEvent, bl)
+        children.forEach { it.mouseClicked(mouseButtonEvent, bl) }
     }
 
     override fun mouseReleased(mouseButtonEvent: MouseButtonEvent) {
         if(mouseButtonEvent.button() == 0)
             dragging = false
 
-        super.mouseReleased(mouseButtonEvent)
+        children.forEach { it.mouseReleased(mouseButtonEvent) }
     }
 }

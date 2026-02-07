@@ -4,12 +4,12 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.input.MouseButtonEvent
 
 abstract class UIComponent(
-    var parent: UIComponent? = null,
     var x: Float,
     var y: Float,
     var width: Float,
     var height: Float,
 ) {
+    var parent: UIComponent? = null;
 
     open fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {}
     open fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean) {}
@@ -19,6 +19,9 @@ abstract class UIComponent(
     fun absoluteY(): Float = (parent?.absoluteY() ?: 0f) + y
 
     fun intersects(mouseX: Float, mouseY: Float): Boolean {
-        return mouseX >= x && mouseX <= absoluteX() + width && mouseY >= absoluteY() && mouseY <= absoluteY() + height
+        val ax = absoluteX()
+        val ay = absoluteY()
+        return mouseX >= ax && mouseX <= ax + width &&
+                mouseY >= ay && mouseY <= ay + height
     }
 }

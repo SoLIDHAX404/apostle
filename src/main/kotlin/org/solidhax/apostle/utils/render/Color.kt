@@ -29,6 +29,6 @@ object Colors {
     val MINECRAFT_AQUA = Color(85, 255, 255, 255)
     val MINECRAFT_RED = Color(255, 85, 85, 255)
     val UI_BACKGROUND = Color(14, 14, 15, 255)
-    val UI_SURFACE = Color(26, 26, 27, 255)
-    val UI_ELEVATED = Color(32, 33, 36, 255)
+    val UI_SURFACE    = Color(26, 26, 27, 255)
+
 }

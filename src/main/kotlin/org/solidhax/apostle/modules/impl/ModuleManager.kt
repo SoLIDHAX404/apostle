@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.gui.widget.Widget
+import org.solidhax.apostle.modules.skyblock.TestModule
 
 object ModuleManager {
     private val HUD_LAYER: ResourceLocation = fromNamespaceAndPath(Apostle.MOD_ID, "hud")
@@ -23,7 +24,7 @@ object ModuleManager {
         get() = modules.flatMap { module -> module.widgets }
 
     fun init() {
-//        listOf().forEach { register(it) }
+        listOf(TestModule).forEach { register(it) }
 
         HudElementRegistry.addFirst(HUD_LAYER, ModuleManager::render)
     }

@@ -22,6 +22,7 @@ object NVGRenderer {
 
     val defaultFont = Font("Default", mc.resourceManager.getResource(ResourceLocation.parse("apostle:font.ttf")).get().open())
     private val fontMap = HashMap<Font, NVGFont>()
+    private val fontBounds = FloatArray(4)
 
     private var scissor: Scissor? = null
     private var drawing: Boolean = false
@@ -91,6 +92,12 @@ object NVGRenderer {
         nvgRGBA(color.redB(), color.greenB(), color.blueB(), color.alphaB(), nvgColor)
         nvgFillColor(vg, nvgColor)
         nvgText(vg, x, y + .5f, text)
+    }
+
+    fun textWidth(text: String, size: Float, font: Font): Float {
+        nvgFontSize(vg, size)
+        nvgFontFaceId(vg, getFontID(font))
+        return nvgTextBounds(vg, 0f, 0f, text, fontBounds)
     }
 
     private fun getFontID(font: Font): Int {
