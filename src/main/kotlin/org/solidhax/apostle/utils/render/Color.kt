@@ -2,6 +2,12 @@ package org.solidhax.apostle.utils.render
 
 data class Color(val red: Int, val green: Int, val blue: Int, val alpha: Int = 255) {
 
+    val rgba: Int
+        get() = ((alpha and 0xFF) shl 24) or
+                ((red   and 0xFF) shl 16) or
+                ((green and 0xFF) shl  8) or
+                ((blue  and 0xFF) shl  0)
+
     fun redB() = red.toByte()
     fun greenB() = green.toByte()
     fun blueB() = blue.toByte()
@@ -30,5 +36,4 @@ object Colors {
     val MINECRAFT_RED = Color(255, 85, 85, 255)
     val UI_BACKGROUND = Color(14, 14, 15, 255)
     val UI_SURFACE    = Color(26, 26, 27, 255)
-
 }

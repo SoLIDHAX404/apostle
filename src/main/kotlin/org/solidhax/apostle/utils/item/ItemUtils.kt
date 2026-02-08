@@ -14,7 +14,7 @@ object ItemUtils {
 
     fun getItemRarity(lore: List<String>): ItemRarity? {
         for(i in lore.indices.reversed()) {
-            val rarity = rarityRegex.matchEntire(lore[i])?.groups?.get(1)?.value ?: continue
+            val rarity = rarityRegex.find(lore[i])?.groups?.get(1)?.value ?: continue
             return ItemRarity.entries.find { it.identifier == rarity }
         }
 

@@ -30,8 +30,6 @@ object ClickGUI : Screen(Component.literal("Click GUI")) {
         return super.mouseReleased(mouseButtonEvent)
     }
 
-    override fun renderTransparentBackground(guiGraphics: GuiGraphics?) { return }
-    override fun renderBlurredBackground(guiGraphics: GuiGraphics?) { return }
     override fun renderBackground(guiGraphics: GuiGraphics?, i: Int, j: Int, f: Float) { return }
 
     override fun isPauseScreen(): Boolean { return false}
