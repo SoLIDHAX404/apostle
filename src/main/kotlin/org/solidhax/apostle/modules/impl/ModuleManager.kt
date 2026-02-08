@@ -1,8 +1,6 @@
 package org.solidhax.apostle.modules.impl
 
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -13,7 +11,6 @@ import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.gui.widget.Widget
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
-import org.solidhax.apostle.modules.skyblock.TestModule
 
 object ModuleManager {
     private val HUD_LAYER: ResourceLocation = fromNamespaceAndPath(Apostle.MOD_ID, "hud")

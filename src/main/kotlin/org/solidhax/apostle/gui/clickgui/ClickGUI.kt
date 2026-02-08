@@ -18,31 +18,3 @@ object ClickGUI : Vigilant(File("config/apostle.toml"), "Apostle") {
         initialize()
     }
 }
-
-//object ClickGUI : Screen(Component.literal("Click GUI")) {
-//
-//    val mainWindow = UIWindow(0f, 0f, 600f, 400f, "Click GUI Window")
-//
-//    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, deltaTicks: Float) {
-//
-//        NVGSpecialRenderer.draw(guiGraphics, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight()) {
-//            mainWindow.render(guiGraphics, mouseX, mouseY, deltaTicks)
-//        }
-//
-//        super.render(guiGraphics, mouseX, mouseY, deltaTicks)
-//    }
-//
-//    override fun mouseClicked(mouseButtonEvent: MouseButtonEvent, bl: Boolean): Boolean {
-//        mainWindow.mouseClicked(mouseButtonEvent, bl)
-//        return super.mouseClicked(mouseButtonEvent, bl)
-//    }
-//
-//    override fun mouseReleased(mouseButtonEvent: MouseButtonEvent): Boolean {
-//        mainWindow.mouseReleased(mouseButtonEvent)
-//        return super.mouseReleased(mouseButtonEvent)
-//    }
-//
-//    override fun renderBackground(guiGraphics: GuiGraphics?, i: Int, j: Int, f: Float) { return }
-//
-//    override fun isPauseScreen(): Boolean { return false}
-//}

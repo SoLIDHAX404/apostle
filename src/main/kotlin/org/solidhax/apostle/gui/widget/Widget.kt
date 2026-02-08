@@ -1,8 +1,8 @@
 package org.solidhax.apostle.gui.widget
 
 import net.minecraft.client.gui.GuiGraphics
-import org.solidhax.apostle.utils.render.NVGSpecialRenderer
 import org.solidhax.apostle.modules.impl.Module
+import org.solidhax.apostle.utils.render.NVGSpecialRenderer
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
