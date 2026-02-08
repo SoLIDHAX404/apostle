@@ -1,10 +1,34 @@
 package org.solidhax.apostle.modules.skyblock
 
 import com.google.gson.Gson
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
 import org.solidhax.apostle.modules.impl.Module
+import org.solidhax.apostle.utils.chat.modMessage
+import org.solidhax.apostle.utils.item.itemUUID
 
 object ProtectItem : Module(name = "Protect Item", description = "Protects items based on uuid.", defaultConfig = "protectitem.json") {
     val protectedItems = ArrayList<String>()
+
+    fun onProtectItem() {
+        val player = mc.player ?: return
+        val heldItem = player.mainHandItem ?: return
+        val heldItemName = heldItem.customName ?: return
+        val heldItemUUID = heldItem.itemUUID
+
+        if(protectedItems.contains(heldItemUUID)) {
+            protectedItems.remove(heldItemUUID)
+
+            val message = heldItemName.copy().append(Component.literal(" will no longer be protected!").withStyle(ChatFormatting.RED))
+            modMessage(message)
+            return
+        }
+
+        protectedItems.add(heldItemUUID)
+
+        val message = heldItemName.copy().append(Component.literal(" will now be protected!").withStyle(ChatFormatting.GREEN))
+        modMessage(message)
+    }
 
     override fun loadConfig(gson: Gson, json: Any?) {
         protectedItems.clear()
