@@ -40,6 +40,54 @@ object Config : Vigilant(File("config/apostle.toml"), "Apostle") {
     )
     var truncateDamageNumbers: Boolean = false
 
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Hearts",
+        description = "Removes the vanilla hearts.",
+        category = "HUD"
+    )
+    var removeHearts: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Armor",
+        description = "Removes the vanilla armor.",
+        category = "HUD"
+    )
+    var removeArmor: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Hunger",
+        description = "Removes the vanilla hunger.",
+        category = "HUD"
+    )
+    var removeHunger: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Potion Effects",
+        description = "Removes the vanilla potion effects widget.",
+        category = "HUD"
+    )
+    var removePotionEffects: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Inventory Potion Effects",
+        description = "Removes the vanilla potion effects widget in the inventory.",
+        category = "HUD"
+    )
+    var removeInventoryPotionEffects: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
+        name = "Remove Held Item Tooltip",
+        description = "Removes the vanilla held item tooltip.",
+        category = "HUD"
+    )
+    var removeHeldItemTooltip: Boolean = false
+
     init {
         initialize()
 

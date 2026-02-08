@@ -9,7 +9,7 @@ import org.solidhax.apostle.event.impl.subscribe
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.item.ItemUtils
 
-object RarityDisplay : Module(id = "rarity_display", displayName = "Rarity Display", description = "Rarity display") {
+object RarityDisplay : Module(name = "Rarity Display", description = "Rarity display") {
     val RARITY_TEXTURES: Array<ResourceLocation?> = arrayOf<ResourceLocation?>(
         ResourceLocation.fromNamespaceAndPath("apostle", "rarity"),
         ResourceLocation.fromNamespaceAndPath("apostle", "rarity2"),

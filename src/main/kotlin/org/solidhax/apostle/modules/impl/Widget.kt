@@ -34,7 +34,7 @@ open class Widget(
 
     operator fun provideDelegate(thisRef: Module, property: KProperty<*>): ReadOnlyProperty<Module, Widget> {
         id = property.name
-        moduleId = thisRef.id
+        moduleId = thisRef.name
         thisRef.registerWidget(this)
 
         return object : ReadOnlyProperty<Module, Widget> {

@@ -9,7 +9,7 @@ import org.solidhax.apostle.event.EntityEvent
 import org.solidhax.apostle.event.impl.subscribe
 import org.solidhax.apostle.modules.impl.Module
 
-object DamageSplash : Module(id = "damage_splash", displayName = "Damage Splash", description = "Damage Splash") {
+object DamageSplash : Module(name = "Damage Splash", description = "Damage Splash") {
 
     private val damageRegex = "^([✧✯]?)(\\d{1,3}(?:,\\d{3})*)([⚔+✧❤♞☄✷ﬗ✯]*)$".toRegex()
 

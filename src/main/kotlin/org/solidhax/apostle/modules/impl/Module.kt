@@ -2,7 +2,7 @@ package org.solidhax.apostle.modules.impl
 
 import org.solidhax.apostle.Apostle
 
-abstract class Module(val id: String, val displayName: String, val description: String) {
+abstract class Module(val name: String, val description: String) {
     private val widgetsInternal: MutableList<Widget> = mutableListOf()
 
     protected inline val mc get() = Apostle.mc
