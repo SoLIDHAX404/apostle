@@ -1,7 +1,6 @@
 package org.solidhax.apostle.modules.impl
 
 import org.solidhax.apostle.Apostle
-import org.solidhax.apostle.gui.widget.Widget
 
 abstract class Module(val id: String, val displayName: String, val description: String) {
     private val widgetsInternal: MutableList<Widget> = mutableListOf()

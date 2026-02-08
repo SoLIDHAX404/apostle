@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.Apostle.Companion.mc
-import org.solidhax.apostle.gui.widget.Widget
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
 
