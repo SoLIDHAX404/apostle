@@ -5,7 +5,7 @@ import gg.essential.vigilance.data.Property
 import gg.essential.vigilance.data.PropertyType
 import java.io.File
 
-object Config : Vigilant(File("config/apostle.toml"), "Apostle") {
+object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
 
     @Property(
         type = PropertyType.SWITCH,
