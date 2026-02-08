@@ -34,6 +34,7 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven("https://repo.essential.gg/repository/maven-public")
 }
 
 dependencies {
@@ -46,6 +47,21 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
+
+    property("universalcraft_version").let {
+        modImplementation("gg.essential:universalcraft-1.21.9-fabric:$it")
+        include("gg.essential:universalcraft-1.21.9-fabric:$it")
+    }
+
+    property("elementa_version").let {
+        implementation("gg.essential:elementa:$it")
+        include("gg.essential:elementa:$it")
+    }
+
+    property("vigilance_version").let {
+        implementation("gg.essential:vigilance:$it")
+        include("gg.essential:vigilance:$it")
+    }
 
     property("commodore_version").let {
         implementation("com.github.stivais:Commodore:$it")

@@ -4,9 +4,12 @@
   "package": "org.solidhax.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ConnectionMixin"
   ],
   "client": [
     "AbstractContainerScreenMixin",
+    "ClientLevelMixin",
+    "ClientPacketListenerMixin",
     "GuiMixin"
   ],
   "injectors": {

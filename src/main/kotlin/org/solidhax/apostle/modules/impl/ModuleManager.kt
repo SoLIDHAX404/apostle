@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.gui.widget.Widget
+import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
 import org.solidhax.apostle.modules.skyblock.TestModule
 
@@ -25,7 +26,7 @@ object ModuleManager {
         get() = modules.flatMap { module -> module.widgets }
 
     fun init() {
-        listOf(RarityDisplay).forEach { register(it) }
+        listOf(RarityDisplay, DamageSplash).forEach { register(it) }
 
         HudElementRegistry.addFirst(HUD_LAYER, ModuleManager::render)
     }
