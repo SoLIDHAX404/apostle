@@ -1,6 +1,7 @@
 package org.solidhax.apostle.modules.impl
 
 import com.google.gson.Gson
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
@@ -35,6 +36,7 @@ object ModuleManager {
 
         loadAllConfigs(CONFIG_DIR)
         HudElementRegistry.addFirst(HUD_LAYER, ModuleManager::render)
+        ClientLifecycleEvents.CLIENT_STOPPING.register{ shutdown() }
     }
 
     fun shutdown() {

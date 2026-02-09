@@ -2,6 +2,7 @@ package org.solidhax.apostle.modules.render
 
 import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.modules.impl.Module
+import org.solidhax.apostle.utils.location.LocationUtils
 
 enum class HudType {
     HEARTS,
@@ -15,6 +16,7 @@ enum class HudType {
 object HUD : Module(name = "HUD", description = "HUD")  {
     @JvmStatic
     fun shouldCancelHud(type: HudType): Boolean {
+        if(!LocationUtils.isInSkyblock) return false
         return when (type) {
             HudType.HEARTS -> Config.removeHearts
             HudType.ARMOR -> Config.removeArmor

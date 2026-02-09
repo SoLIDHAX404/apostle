@@ -8,6 +8,7 @@ import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.event.EntityEvent
 import org.solidhax.apostle.event.impl.subscribe
 import org.solidhax.apostle.modules.impl.Module
+import org.solidhax.apostle.utils.location.LocationUtils
 
 object DamageSplash : Module(name = "Damage Splash", description = "Damage Splash") {
 
@@ -25,6 +26,7 @@ object DamageSplash : Module(name = "Damage Splash", description = "Damage Splas
     init {
         subscribe<EntityEvent.Metadata> { event ->
             if(!Config.truncateDamageNumbers) return@subscribe
+            if(!LocationUtils.isInSkyblock) return@subscribe
 
             val stand = event.entity as? ArmorStand ?: return@subscribe
 

@@ -3,98 +3,82 @@ package org.solidhax.apostle.modules.skyblock
 import com.google.gson.Gson
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
 import org.solidhax.apostle.event.AbstractContainerScreenEvent
 import org.solidhax.apostle.event.ItemEvent
 import org.solidhax.apostle.event.impl.subscribe
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.chat.modMessage
 import org.solidhax.apostle.utils.item.itemUUID
+import org.solidhax.apostle.utils.location.Area
+import org.solidhax.apostle.utils.location.LocationUtils
 
 object ProtectItem : Module(name = "Protect Item", description = "Protects items based on uuid.", defaultConfig = "protectitem.json") {
-    val protectedItems = ArrayList<String>()
+    private val protectedItems = hashSetOf<String>()
 
     init {
         subscribe<AbstractContainerScreenEvent.KeyPress> { event ->
-            val slot = event.hoveredSlot ?: return@subscribe
-            val itemInSlot = slot.item ?: return@subscribe
-            val itemName = itemInSlot.styledHoverName ?: return@subscribe
-            val itemUUID = itemInSlot.itemUUID ?: return@subscribe
+            if(!LocationUtils.isInSkyblock) return@subscribe
+            if (!mc.options.keyDrop.matches(event.keyEvent)) return@subscribe
 
-            if(protectedItems.contains(itemUUID) && mc.options.keyDrop.matches(event.keyEvent)) {
-                val message = Component.literal("Stopped your from dropping your ").withStyle(ChatFormatting.RED).append(itemName)
-                modMessage(message)
-
-                event.cancel()
-            }
+            val stack = event.hoveredSlot?.item ?: return@subscribe
+            shouldCancelDrop(stack) { event.cancel() }
         }
 
         subscribe<AbstractContainerScreenEvent.SlotClicked> { event ->
-            if(event.slotId != -999) return@subscribe
-            if(event.carriedItem == null || event.carriedItem.isEmpty) return@subscribe
+            if(!LocationUtils.isInSkyblock) return@subscribe
+            if (event.slotId != -999) return@subscribe
 
-            val itemName = event.carriedItem.styledHoverName ?: return@subscribe
-            val itemUUID = event.carriedItem.itemUUID ?: return@subscribe
-
-            if(protectedItems.contains(itemUUID)) {
-                val message = Component.literal("Stopped your from dropping your ").withStyle(ChatFormatting.RED).append(itemName)
-                modMessage(message)
-
-                event.cancel()
-            }
+            val stack = event.carriedItem ?: return@subscribe
+            shouldCancelDrop(stack) { event.cancel() }
         }
 
         subscribe<ItemEvent.Drop> { event ->
-            val heldItem = event.item
-            if(heldItem.isEmpty) return@subscribe
+            if(!LocationUtils.isInSkyblock || LocationUtils.currentArea == Area.Dungeon) return@subscribe
 
-            val heldItemName = heldItem.styledHoverName ?: return@subscribe
-            val heldItemUUID = heldItem.itemUUID ?: return@subscribe
-
-            if(protectedItems.contains(heldItemUUID)) {
-                val message = Component.literal("Stopped your from dropping your ").withStyle(ChatFormatting.RED).append(heldItemName)
-                modMessage(message)
-
-                event.cancel()
-            }
+            shouldCancelDrop(event.item) { event.cancel() }
         }
     }
 
     fun onProtectItem() {
         val player = mc.player ?: return
-        val heldItem = player.mainHandItem
-        if(heldItem.isEmpty) return
-        val heldItemName = heldItem.customName ?: return
-        val heldItemUUID = heldItem.itemUUID
+        val stack = player.mainHandItem
+        if (stack.isEmpty) return
 
-        if(heldItemUUID == null) {
-            val message = Component.literal("cannot protect this item as it doesnt have a valid uuid.").withStyle(ChatFormatting.RED)
-            modMessage(message)
+        val uuid = stack.itemUUID
+        if (uuid == null) {
+            modMessage(Component.literal("Cannot protect this item because it doesn't have a valid uuid.").withStyle(ChatFormatting.RED))
             return
         }
 
-        if(protectedItems.contains(heldItemUUID)) {
-            protectedItems.remove(heldItemUUID)
+        val nowProtected = protectedItems.add(uuid)
+        if (!nowProtected) protectedItems.remove(uuid)
 
-            val message = heldItemName.copy().append(Component.literal(" will no longer be protected!").withStyle(ChatFormatting.RED))
-            modMessage(message)
-            return
-        }
+        val msg = stack.hoverName.copy().append(
+            Component.literal(if (nowProtected) " will now be protected!" else " will no longer be protected!").withStyle(if (nowProtected) ChatFormatting.GREEN else ChatFormatting.RED)
+        )
 
-        protectedItems.add(heldItemUUID)
+        modMessage(msg)
+    }
 
-        val message = heldItemName.copy().append(Component.literal(" will now be protected!").withStyle(ChatFormatting.GREEN))
+    private inline fun shouldCancelDrop(stack: ItemStack, cancel: () -> Unit) {
+        if (stack.isEmpty) return
+
+        val uuid = stack.itemUUID ?: return
+        if (!protectedItems.contains(uuid)) return
+
+        val message = Component.literal("Stopped you from dropping your ").withStyle(ChatFormatting.RED).append(stack.hoverName)
+
         modMessage(message)
+        cancel()
     }
 
     override fun loadConfig(gson: Gson, json: Any?) {
         protectedItems.clear()
-
-        if(json is List<*>) {
-            json.filterIsInstance<String>().forEach { protectedItems.add(it) }
+        if (json is List<*>) {
+            json.filterIsInstance<String>().forEach(protectedItems::add)
         }
     }
 
-    override fun saveConfig(gson: Gson): Any {
-        return protectedItems
-    }
+    override fun saveConfig(gson: Gson): Any = protectedItems.toList()
 }
