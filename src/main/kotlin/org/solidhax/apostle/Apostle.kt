@@ -10,7 +10,6 @@ import org.solidhax.apostle.commands.mainCommand
 import org.solidhax.apostle.event.WorldEvent
 import org.solidhax.apostle.modules.impl.ModuleManager
 import org.solidhax.apostle.utils.location.LocationUtils
-import org.solidhax.apostle.utils.render.NVGSpecialRenderer
 import org.solidhax.apostle.utils.scheduler.TickScheduler
 
 class Apostle : ClientModInitializer {
@@ -19,7 +18,6 @@ class Apostle : ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register{ dispatcher, _ -> arrayOf(mainCommand).forEach { command -> command.register(dispatcher) } }
         ClientPlayConnectionEvents.JOIN.register { _, _, _ -> WorldEvent.Load().post() }
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> WorldEvent.Unload().post() }
-        SpecialGuiElementRegistry.register { context -> NVGSpecialRenderer(context.vertexConsumers()) }
 
         ModuleManager.init()
         TickScheduler.init()

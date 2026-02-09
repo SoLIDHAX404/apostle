@@ -1,45 +1,48 @@
 package org.solidhax.apostle.modules.impl
 
+import com.google.gson.Gson
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
-import org.solidhax.apostle.utils.render.NVGSpecialRenderer
+import org.solidhax.apostle.Apostle.Companion.mc
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-open class Widget(
-    var x: Float = 500f,
-    var y: Float = 500f,
-    var width: Float = 100f,
-    var height: Float = 24f,
-) {
+open class Widget(var x: Int = 10, var y: Int = 10, var width: Int = 100, var height: Int = 30) {
     var id: String = ""
         private set
 
     var moduleId: String = ""
         private set
 
-    fun render(context: GuiGraphics) {
-        NVGSpecialRenderer.draw(context, x.toInt(), y.toInt(), width.toInt(), height.toInt()) {
-            val (newWidth, newHeight) = draw()
+    fun render(g: GuiGraphics) {
+        val (newW, newH) = draw(g)
 
-            if(newWidth > 0 && newHeight > 0) {
-                width = newWidth.toFloat()
-                height = newHeight.toFloat()
-            }
-        }
+        if (newW > 0) width = newW
+        if (newH > 0) height = newH
     }
 
-    open fun draw(): Pair<Int, Int> {
-        return width.toInt() to height.toInt()
+    open fun draw(guiGraphics: GuiGraphics): Pair<Int, Int> {
+        return width to height
     }
+
+    fun loadConfig(gson: Gson, json: Any?) {
+        val map = json as? Map<*, *> ?: return
+
+        (map["x"] as? Number)?.let { x = it.toInt() }
+        (map["y"] as? Number)?.let { y = it.toInt() }
+    }
+
+    fun saveConfig(): Any = mapOf("x" to x, "y" to y)
+
+    fun font(): Font = mc.font
+    fun textWidth(text: String) = font().width(text)
 
     operator fun provideDelegate(thisRef: Module, property: KProperty<*>): ReadOnlyProperty<Module, Widget> {
         id = property.name
         moduleId = thisRef.name
         thisRef.registerWidget(this)
 
-        return object : ReadOnlyProperty<Module, Widget> {
-            override fun getValue(thisRef: Module, property: KProperty<*>): Widget = this@Widget
-        }
+        return ReadOnlyProperty { _, _ -> this }
     }
 }
 
@@ -47,15 +50,15 @@ class HUDWidget(
     val name: String,
     val description: String,
     val enabledByDefault: Boolean,
-    private val renderBlock: Widget.() -> Pair<Int, Int>,
+    private val renderBlock: Widget.(GuiGraphics) -> Pair<Int, Int>,
 ) : Widget() {
-    override fun draw(): Pair<Int, Int> = renderBlock()
+    override fun draw(guiGraphics: GuiGraphics): Pair<Int, Int> = renderBlock(guiGraphics)
 }
 
 fun HUD(
     name: String,
     description: String,
     enabledByDefault: Boolean = true,
-    renderBlock: Widget.() -> Pair<Int, Int>,
+    renderBlock: Widget.(GuiGraphics) -> Pair<Int, Int>,
 ): HUDWidget = HUDWidget(name, description, enabledByDefault, renderBlock)
 

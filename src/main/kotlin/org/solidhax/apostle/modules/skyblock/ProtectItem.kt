@@ -13,7 +13,7 @@ import org.solidhax.apostle.utils.item.itemUUID
 import org.solidhax.apostle.utils.location.Area
 import org.solidhax.apostle.utils.location.LocationUtils
 
-object ProtectItem : Module(name = "Protect Item", description = "Protects items based on uuid.", defaultConfig = "protectitem.json") {
+object ProtectItem : Module(name = "Protect Item", description = "Protects items based on uuid.", defaultConfig = "protect-item.json") {
     private val protectedItems = hashSetOf<String>()
 
     init {

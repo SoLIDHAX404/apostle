@@ -34,13 +34,15 @@ object ModuleManager {
     fun init() {
         listOf(RarityDisplay, DamageSplash, HUD, ProtectItem).forEach { register(it) }
 
-        loadAllConfigs(CONFIG_DIR)
+        loadAllConfigs()
+        loadHudPositions()
         HudElementRegistry.addFirst(HUD_LAYER, ModuleManager::render)
         ClientLifecycleEvents.CLIENT_STOPPING.register{ shutdown() }
     }
 
     fun shutdown() {
-        saveAllConfigs(CONFIG_DIR)
+        saveAllConfigs()
+        saveHudPositions()
     }
 
     fun register(vararg modules: Module) {
@@ -50,11 +52,11 @@ object ModuleManager {
         }
     }
 
-    fun loadAllConfigs(configDir: Path) {
-        Files.createDirectories(configDir)
+    fun loadAllConfigs() {
+        Files.createDirectories(CONFIG_DIR)
 
         modules.forEach { module ->
-            val file = configDir.resolve("${module.defaultConfig}")
+            val file = CONFIG_DIR.resolve("${module.defaultConfig}")
             val raw = if(Files.exists(file)) Files.readString(file) else module.loadDefaultConfig()
 
             val parsed = try { gson.fromJson(raw, Any::class.java) } catch (ex: Exception) { null }
@@ -63,25 +65,54 @@ object ModuleManager {
         }
     }
 
-    fun saveAllConfigs(configDir: Path) {
-        Files.createDirectories(configDir)
+    fun loadHudPositions() {
+        Files.createDirectories(CONFIG_DIR)
+
+        val file = CONFIG_DIR.resolve("hud-positions.json")
+        val raw = if (Files.exists(file)) Files.readString(file) else return
+
+        val parsed = try {
+            gson.fromJson(raw, Any::class.java)
+        } catch (ex: Exception) {
+            null
+        }
+
+        val map = parsed as? Map<*, *> ?: return
+
+        widgets.forEach { widget ->
+            val widgetJson = map[widget.id]
+            widget.loadConfig(gson, widgetJson)
+        }
+    }
+
+    fun saveAllConfigs() {
+        Files.createDirectories(CONFIG_DIR)
 
         for(module in modules) {
             val jsonObject = module.saveConfig(gson) ?: continue
             val text = gson.toJson(jsonObject)
 
-            val file = configDir.resolve("${module.defaultConfig}")
+            val file = CONFIG_DIR.resolve("${module.defaultConfig}")
             Files.writeString(file, text)
         }
+    }
+
+    fun saveHudPositions() {
+        Files.createDirectories(CONFIG_DIR)
+
+        val file = CONFIG_DIR.resolve("hud-positions.json")
+
+        val map = widgets.associate { widget ->
+            widget.id to widget.saveConfig()
+        }
+
+        Files.writeString(file, gson.toJson(map))
     }
 
     fun render(guiGraphics: GuiGraphics, deltaTracker: DeltaTracker) {
         if(mc.screen != null) return
 
         guiGraphics.pose().pushMatrix()
-
-        val guiScale = Minecraft.getInstance().window.guiScale
-        guiGraphics.pose().scale(1f / guiScale, 1f / guiScale)
 
         for(widget in widgets) { widget.render(guiGraphics) }
 
