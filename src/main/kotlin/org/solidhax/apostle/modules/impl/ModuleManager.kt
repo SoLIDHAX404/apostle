@@ -26,7 +26,7 @@ object ModuleManager {
     val modules: List<Module>
         get() = modulesById.values.toList()
 
-    val widgets: List<Widget>
+    val widgets: List<HudElement>
         get() = modules.flatMap { module -> module.widgets }
 
     val gson = Gson()
@@ -80,8 +80,8 @@ object ModuleManager {
         val map = parsed as? Map<*, *> ?: return
 
         widgets.forEach { widget ->
-            val widgetJson = map[widget.id]
-            widget.loadConfig(gson, widgetJson)
+            val widgetJson = map[widget.owner?.name]
+            widget.loadConfig(widgetJson)
         }
     }
 
@@ -103,7 +103,7 @@ object ModuleManager {
         val file = CONFIG_DIR.resolve("hud-positions.json")
 
         val map = widgets.associate { widget ->
-            widget.id to widget.saveConfig()
+            widget.owner?.name to widget.saveConfig()
         }
 
         Files.writeString(file, gson.toJson(map))
@@ -113,8 +113,10 @@ object ModuleManager {
         if(mc.screen != null) return
 
         guiGraphics.pose().pushMatrix()
+        val sf = mc.window.guiScale
+        guiGraphics.pose().scale(1f / sf, 1f / sf)
 
-        for(widget in widgets) { widget.render(guiGraphics) }
+        for(widget in widgets) { widget.draw(guiGraphics, false) }
 
         guiGraphics.pose().popMatrix()
     }

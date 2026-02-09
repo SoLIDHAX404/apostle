@@ -1,10 +1,8 @@
 package org.solidhax.apostle.modules.render
 
 import org.solidhax.apostle.config.Config
-import org.solidhax.apostle.modules.impl.HUD
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.location.LocationUtils
-import org.solidhax.apostle.utils.render.Colors
 
 enum class HudType {
     HEARTS,
@@ -16,16 +14,6 @@ enum class HudType {
 }
 
 object HUD : Module(name = "HUD", description = "HUD")  {
-
-    val test by HUD("Test", "Test") { g ->
-        val label = LocationUtils.currentArea.displayName
-        val labelWidth = textWidth(label)
-        val labelHeight = font().lineHeight
-
-        g.drawString(font(), label, x, y, 0xFFFFFFFF.toInt(), true)
-
-        labelWidth to 9
-    }
 
     @JvmStatic
     fun shouldCancelHud(type: HudType): Boolean {
