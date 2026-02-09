@@ -42,6 +42,14 @@ object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
 
     @Property(
         type = PropertyType.SWITCH,
+        name = "Highlight Completed Commissions",
+        description = "Highlights completed commissions in the commission menu.",
+        category = "Mining"
+    )
+    var highlightCompletedCommissions: Boolean = false
+
+    @Property(
+        type = PropertyType.SWITCH,
         name = "Remove Hearts",
         description = "Removes the vanilla hearts.",
         category = "HUD"

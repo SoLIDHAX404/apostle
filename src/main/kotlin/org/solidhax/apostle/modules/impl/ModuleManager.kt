@@ -3,6 +3,7 @@ package org.solidhax.apostle.modules.impl
 import com.google.gson.Gson
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.Apostle.Companion.mc
+import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.ProtectItem
@@ -32,11 +34,11 @@ object ModuleManager {
     val gson = Gson()
 
     fun init() {
-        listOf(RarityDisplay, DamageSplash, HUD, ProtectItem).forEach { register(it) }
+        listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions).forEach { register(it) }
 
         loadAllConfigs()
         loadHudPositions()
-        HudElementRegistry.addFirst(HUD_LAYER, ModuleManager::render)
+        HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)
         ClientLifecycleEvents.CLIENT_STOPPING.register{ shutdown() }
     }
 
