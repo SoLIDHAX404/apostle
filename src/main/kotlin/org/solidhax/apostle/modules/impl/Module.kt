@@ -20,8 +20,9 @@ abstract class Module(val name: String, val description: String, val defaultConf
         x: Int = 10,
         y: Int = 10,
         scale: Float = 2f,
+        anchorPoint: AnchorPoint = AnchorPoint.TOP_LEFT,
         block: GuiGraphics.(example: Boolean) -> Pair<Int, Int>
-    ): HudElement = HudElement(x, y, scale, false, this, block).also { registerWidget(it) }
+    ): HudElement = HudElement(x, y, scale, false, anchorPoint, this, block).also { registerWidget(it) }
 
     open fun loadConfig(gson: Gson, json: Any?) {}
     open fun saveConfig(gson: Gson): Any? = null
