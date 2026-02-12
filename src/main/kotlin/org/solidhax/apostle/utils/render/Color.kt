@@ -11,10 +11,9 @@ data class Color(val red: Int, val green: Int, val blue: Int, val alpha: Float =
                     ((blue  and 0xFF))
         }
 
-    fun redB() = red.toByte()
-    fun greenB() = green.toByte()
-    fun blueB() = blue.toByte()
-    fun alphaB() = (alpha.coerceIn(0f, 1f) * 255).toInt().toByte()
+    val redFloat get() = red / 255f
+    val greenFloat get() = green / 255f
+    val blueFloat get() = blue / 255f
 
     fun withAlpha(alpha: Float, newInstance: Boolean = true): Color {
         return if (newInstance) {
@@ -39,6 +38,7 @@ object Colors {
     val BLUE = Color(0, 0, 255, 1f)
     val WHITE = Color(255, 255, 255, 1f)
     val BLACK = Color(0, 0, 0, 1f)
+    val MINECRAFT_GRAY = Color(170, 170, 170, 1f)
     val MINECRAFT_GREEN = Color(85, 255, 85, 1f)
     val MINECRAFT_BLUE = Color(85, 85, 255, 1f)
     val MINECRAFT_DARK_PURPLE = Color(170, 0, 170, 1f)

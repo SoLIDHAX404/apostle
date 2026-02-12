@@ -2,6 +2,7 @@ package org.solidhax.apostle.config
 
 import gg.essential.vigilance.Vigilant
 import org.solidhax.apostle.modules.mining.Commissions
+import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
@@ -26,6 +27,10 @@ object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
         category("Mining") {
             subcategory("Commissions") {
                 switch(Commissions::highlightCompletedCommissions, "Highlight Completed Commissions", "Highlight commissions in the claim menu.")
+            }
+
+            subcategory("Mineshafts") {
+                switch(CorpseFinder::enabled, "Corpse Finder", "USE AT YOUR OWN RISK! Adds a ESP style box at every corpses position in a mineshaft.")
             }
         }
 

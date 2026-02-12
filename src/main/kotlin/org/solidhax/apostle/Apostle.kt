@@ -10,6 +10,7 @@ import org.solidhax.apostle.event.impl.EventBus
 import org.solidhax.apostle.event.impl.EventDispatcher
 import org.solidhax.apostle.modules.impl.ModuleManager
 import org.solidhax.apostle.utils.location.LocationUtils
+import org.solidhax.apostle.utils.render.RenderUtils
 import org.solidhax.apostle.utils.scheduler.TickScheduler
 
 class Apostle : ClientModInitializer {
@@ -19,7 +20,7 @@ class Apostle : ClientModInitializer {
             mainCommand, protectItemCommand
         ).forEach { command -> command.register(dispatcher) } }
 
-        listOf(this, Config, EventDispatcher, TickScheduler, LocationUtils, ModuleManager).forEach { EventBus.subscribe(it) }
+        listOf(this, Config, EventDispatcher, RenderUtils, TickScheduler, LocationUtils, ModuleManager).forEach { EventBus.subscribe(it) }
     }
 
     companion object {

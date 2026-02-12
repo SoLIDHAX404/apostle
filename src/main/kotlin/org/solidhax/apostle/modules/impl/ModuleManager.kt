@@ -12,6 +12,7 @@ import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.event.ClientEvent
 import org.solidhax.apostle.event.impl.on
 import org.solidhax.apostle.modules.mining.Commissions
+import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.ProtectItem
@@ -29,7 +30,7 @@ object ModuleManager {
 
     init {
         on<ClientEvent.Start> {
-            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions).forEach { modules.add(it) }
+            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions, CorpseFinder).forEach { modules.add(it) }
 
             loadAllConfigs()
             loadHudPositions()
