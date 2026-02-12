@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiMixin {
     @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;III)V"), cancellable = true)
     private void onRenderSlot(GuiGraphics guiGraphics, int i, int j, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int k, CallbackInfo ci) {
-        if(new GuiEvent.RenderSlot((Gui)(Object)this, guiGraphics, i, j, itemStack).post()) ci.cancel();
+        if(new GuiEvent.RenderSlot((Gui)(Object)this, guiGraphics, i, j, itemStack).postAndCatch()) ci.cancel();
     }
 
     @Inject(method = "renderHearts", at = @At(value = "HEAD"), cancellable = true)

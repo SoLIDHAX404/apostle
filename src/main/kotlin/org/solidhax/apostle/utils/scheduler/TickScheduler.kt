@@ -1,12 +1,15 @@
 package org.solidhax.apostle.utils.scheduler
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import org.solidhax.apostle.event.TickEvent
+import org.solidhax.apostle.event.impl.on
 
 object TickScheduler {
     private val queuedTasks = ArrayDeque<ScheduledTask>()
 
-    fun init() {
-        ClientTickEvents.END_WORLD_TICK.register { tick() }
+    init {
+        on<TickEvent.End> {
+            tick()
+        }
     }
 
     fun schedule(ticks: Int, task: () -> Unit) {

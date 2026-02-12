@@ -1,16 +1,16 @@
 package org.solidhax.apostle.event.impl
 
 abstract class CancellableEvent : Event() {
-    var cancelled = false
-    private set
+    var isCancelled = false
+        private set
 
     fun cancel() {
-        cancelled = true
+        isCancelled = true
     }
 
-    override fun post(): Boolean {
+    override fun postAndCatch(): Boolean {
         EventBus.post(this)
 
-        return cancelled
+        return isCancelled
     }
 }
