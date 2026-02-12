@@ -1,26 +1,25 @@
 package org.solidhax.apostle.modules.mining
 
-import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.event.AbstractContainerScreenEvent
-import org.solidhax.apostle.event.impl.subscribe
+import org.solidhax.apostle.event.impl.on
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.item.loreString
 import org.solidhax.apostle.utils.render.Colors
 
-object Commissions : Module(name = "Commissions", "Various qol surrounding commissions") {
+object Commissions : Module() {
+
+    var highlightCompletedCommissions = false
 
     init {
-        subscribe<AbstractContainerScreenEvent.RenderSlot> { event ->
-            if(!Config.highlightCompletedCommissions)
-            if(!event.screen.title.string.contains("Commissions")) return@subscribe
+        on<AbstractContainerScreenEvent.RenderSlot> {
+            if(!highlightCompletedCommissions || !screen.title.string.contains("Commissions")) return@on
 
-            val slot = event.slot
-            val itemInSlot = slot.item?.takeUnless { it.isEmpty } ?: return@subscribe
+            val itemInSlot = slot.item?.takeUnless { it.isEmpty } ?: return@on
             val itemLore = itemInSlot.loreString
 
-            if(!itemLore.contains("COMPLETED")) return@subscribe
+            if(!itemLore.contains("COMPLETED")) return@on
 
-            event.guiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, Colors.MINECRAFT_GREEN.rgba)
+            guiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, Colors.MINECRAFT_GREEN.rgba)
         }
     }
 }

@@ -7,9 +7,9 @@ import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.utils.render.Colors
+import kotlin.math.sign
 import org.solidhax.apostle.utils.mouseX as apostleMouseX
 import org.solidhax.apostle.utils.mouseY as apostleMouseY
-import kotlin.math.sign
 
 object WidgetEditor : Screen(Component.literal("Widget Editor")) {
 
@@ -45,7 +45,7 @@ object WidgetEditor : Screen(Component.literal("Widget Editor")) {
                 hoveredY.toFloat(),
             )
             guiGraphics.pose().scale(2f, 2f)
-            guiGraphics.drawString(mc.font, hoveredHud.owner?.name, 0, 0, Colors.WHITE.rgba)
+            guiGraphics.drawString(mc.font, hoveredHud.name, 0, 0, Colors.WHITE.rgba)
             guiGraphics.drawString(mc.font, Component.literal("Scale: %.2f".format(hoveredHud.scale)), 0, 10, Colors.WHITE.rgba)
             guiGraphics.drawString(mc.font, Component.literal("Anchor: ${hoveredHud.anchorPoint.name}"), 0, 20, Colors.WHITE.rgba)
             guiGraphics.pose().popMatrix()

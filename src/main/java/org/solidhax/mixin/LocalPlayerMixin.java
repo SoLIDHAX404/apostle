@@ -1,7 +1,6 @@
 package org.solidhax.mixin;
 
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import org.solidhax.apostle.event.ItemEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +15,6 @@ public class LocalPlayerMixin {
         LocalPlayer self = (LocalPlayer) (Object) this;
         ItemStack heldItem = self.getMainHandItem();
 
-        if(new ItemEvent.Drop(heldItem).post()) cir.setReturnValue(false);
+        if(new ItemEvent.Drop(heldItem).postAndCatch()) cir.setReturnValue(false);
     }
 }

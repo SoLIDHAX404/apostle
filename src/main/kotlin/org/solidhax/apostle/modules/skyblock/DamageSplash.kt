@@ -4,13 +4,14 @@ import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.entity.decoration.ArmorStand
-import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.event.EntityEvent
-import org.solidhax.apostle.event.impl.subscribe
+import org.solidhax.apostle.event.impl.on
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.location.LocationUtils
 
-object DamageSplash : Module(name = "Damage Splash", description = "Damage Splash") {
+object DamageSplash : Module() {
+
+    var enabled = false
 
     private val damageRegex = "^([✧✯]?)(\\d{1,3}(?:,\\d{3})*)([⚔+✧❤♞☄✷ﬗ✯]*)$".toRegex()
 
@@ -24,16 +25,16 @@ object DamageSplash : Module(name = "Damage Splash", description = "Damage Splas
     )
 
     init {
-        subscribe<EntityEvent.Metadata> { event ->
-            if(!Config.truncateDamageNumbers) return@subscribe
-            if(!LocationUtils.isInSkyblock) return@subscribe
+        on<EntityEvent.Metadata> {
+            if(!enabled) return@on
+            if(!LocationUtils.isInSkyblock) return@on
 
-            val stand = event.entity as? ArmorStand ?: return@subscribe
+            val stand = entity as? ArmorStand ?: return@on
 
-            val name = stand.customName ?: return@subscribe
+            val name = stand.customName ?: return@on
             val nameString = name.string
 
-            val match = damageRegex.matchEntire(nameString) ?: return@subscribe
+            val match = damageRegex.matchEntire(nameString) ?: return@on
 
             val prefix = match.groupValues[1]
             val numberPart = match.groupValues[2]

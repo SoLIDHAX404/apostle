@@ -6,37 +6,35 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import org.solidhax.apostle.event.AbstractContainerScreenEvent
 import org.solidhax.apostle.event.ItemEvent
-import org.solidhax.apostle.event.impl.subscribe
+import org.solidhax.apostle.event.impl.on
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.chat.modMessage
 import org.solidhax.apostle.utils.item.itemUUID
 import org.solidhax.apostle.utils.location.Area
 import org.solidhax.apostle.utils.location.LocationUtils
 
-object ProtectItem : Module(name = "Protect Item", description = "Protects items based on uuid.", defaultConfig = "protect-item.json") {
+object ProtectItem : Module(defaultConfig = "protect-item.json") {
     private val protectedItems = hashSetOf<String>()
 
     init {
-        subscribe<AbstractContainerScreenEvent.KeyPress> { event ->
-            if(!LocationUtils.isInSkyblock) return@subscribe
-            if (!mc.options.keyDrop.matches(event.keyEvent)) return@subscribe
+        on<AbstractContainerScreenEvent.KeyPress> {
+            if(!LocationUtils.isInSkyblock || !mc.options.keyDrop.matches(keyEvent)) return@on
 
-            val stack = event.hoveredSlot?.item ?: return@subscribe
-            shouldCancelDrop(stack) { event.cancel() }
+            val stack = hoveredSlot?.item ?: return@on
+            shouldCancelDrop(stack) { cancel() }
         }
 
-        subscribe<AbstractContainerScreenEvent.SlotClicked> { event ->
-            if(!LocationUtils.isInSkyblock) return@subscribe
-            if (event.slotId != -999) return@subscribe
+        on<AbstractContainerScreenEvent.SlotClicked> {
+            if(!LocationUtils.isInSkyblock || slotId != -999) return@on
 
-            val stack = event.carriedItem ?: return@subscribe
-            shouldCancelDrop(stack) { event.cancel() }
+            val stack = carriedItem ?: return@on
+            shouldCancelDrop(stack) { cancel() }
         }
 
-        subscribe<ItemEvent.Drop> { event ->
-            if(!LocationUtils.isInSkyblock || LocationUtils.currentArea == Area.Dungeon) return@subscribe
+        on<ItemEvent.Drop> {
+            if(!LocationUtils.isInSkyblock || LocationUtils.currentArea == Area.Dungeon) return@on
 
-            shouldCancelDrop(event.item) { event.cancel() }
+            shouldCancelDrop(item) { cancel() }
         }
     }
 

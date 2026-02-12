@@ -1,6 +1,5 @@
 package org.solidhax.apostle.modules.render
 
-import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.location.LocationUtils
 
@@ -13,18 +12,25 @@ enum class HudType {
     HELD_ITEM_TOOLTIP
 }
 
-object HUD : Module(name = "HUD", description = "HUD")  {
+object HUD : Module()  {
+
+    var removeHearts = false
+    var removeArmor = false
+    var removeHunger = false
+    var removePotionEffects = false
+    var removeInventoryPotionEffects = false
+    var removeHeldItemTooltip = false
 
     @JvmStatic
     fun shouldCancelHud(type: HudType): Boolean {
         if(!LocationUtils.isInSkyblock) return false
         return when (type) {
-            HudType.HEARTS -> Config.removeHearts
-            HudType.ARMOR -> Config.removeArmor
-            HudType.HUNGER -> Config.removeHunger
-            HudType.POTION_EFFECTS -> Config.removePotionEffects
-            HudType.INVENTORY_POTION_EFFECTS -> Config.removeInventoryPotionEffects
-            HudType.HELD_ITEM_TOOLTIP -> Config.removeHeldItemTooltip
+            HudType.HEARTS -> removeHearts
+            HudType.ARMOR -> removeArmor
+            HudType.HUNGER -> removeHunger
+            HudType.POTION_EFFECTS -> removePotionEffects
+            HudType.INVENTORY_POTION_EFFECTS -> removeInventoryPotionEffects
+            HudType.HELD_ITEM_TOOLTIP -> removeHeldItemTooltip
         }
     }
 }

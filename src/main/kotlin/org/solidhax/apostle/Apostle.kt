@@ -2,12 +2,12 @@ package org.solidhax.apostle
 
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
-import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry
 import net.minecraft.client.Minecraft
 import org.solidhax.apostle.commands.mainCommand
-import org.solidhax.apostle.event.WorldEvent
+import org.solidhax.apostle.commands.protectItemCommand
+import org.solidhax.apostle.config.Config
+import org.solidhax.apostle.event.impl.EventBus
+import org.solidhax.apostle.event.impl.EventDispatcher
 import org.solidhax.apostle.modules.impl.ModuleManager
 import org.solidhax.apostle.utils.location.LocationUtils
 import org.solidhax.apostle.utils.scheduler.TickScheduler
@@ -15,13 +15,11 @@ import org.solidhax.apostle.utils.scheduler.TickScheduler
 class Apostle : ClientModInitializer {
 
     override fun onInitializeClient() {
-        ClientCommandRegistrationCallback.EVENT.register{ dispatcher, _ -> arrayOf(mainCommand).forEach { command -> command.register(dispatcher) } }
-        ClientPlayConnectionEvents.JOIN.register { _, _, _ -> WorldEvent.Load().post() }
-        ClientPlayConnectionEvents.DISCONNECT.register { _, _ -> WorldEvent.Unload().post() }
+        ClientCommandRegistrationCallback.EVENT.register{ dispatcher, _ -> arrayOf(
+            mainCommand, protectItemCommand
+        ).forEach { command -> command.register(dispatcher) } }
 
-        ModuleManager.init()
-        TickScheduler.init()
-        LocationUtils.init()
+        listOf(this, Config, EventDispatcher, TickScheduler, LocationUtils, ModuleManager).forEach { EventBus.subscribe(it) }
     }
 
     companion object {

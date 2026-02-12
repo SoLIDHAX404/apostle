@@ -1,16 +1,16 @@
 package org.solidhax.apostle.modules.impl
 
 import com.google.gson.Gson
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
 import net.minecraft.client.DeltaTracker
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
 import org.solidhax.apostle.Apostle
 import org.solidhax.apostle.Apostle.Companion.mc
+import org.solidhax.apostle.event.ClientEvent
+import org.solidhax.apostle.event.impl.on
 import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
@@ -23,34 +23,23 @@ object ModuleManager {
     private val HUD_LAYER: ResourceLocation = fromNamespaceAndPath(Apostle.MOD_ID, "hud")
     private val CONFIG_DIR: Path = Path.of("config/apostle")
 
-    private val modulesById: LinkedHashMap<String, Module> = linkedMapOf()
-
-    val modules: List<Module>
-        get() = modulesById.values.toList()
-
-    val widgets: List<HudElement>
-        get() = modules.flatMap { module -> module.widgets }
-
+    val modules: MutableList<Module> = mutableListOf()
+    val widgets: List<HudElement> get() = modules.flatMap { module -> module.widgets }
     val gson = Gson()
 
-    fun init() {
-        listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions).forEach { register(it) }
+    init {
+        on<ClientEvent.Start> {
+            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions).forEach { modules.add(it) }
 
-        loadAllConfigs()
-        loadHudPositions()
-        HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)
-        ClientLifecycleEvents.CLIENT_STOPPING.register{ shutdown() }
-    }
+            loadAllConfigs()
+            loadHudPositions()
 
-    fun shutdown() {
-        saveAllConfigs()
-        saveHudPositions()
-    }
+            HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)
+        }
 
-    fun register(vararg modules: Module) {
-        modules.forEach { module ->
-            require(module.name !in modulesById) {"A module with id ${module.name} already exists."}
-            modulesById[module.name] = module
+        on<ClientEvent.Stop> {
+            saveAllConfigs()
+            saveHudPositions()
         }
     }
 
@@ -82,7 +71,7 @@ object ModuleManager {
         val map = parsed as? Map<*, *> ?: return
 
         widgets.forEach { widget ->
-            val widgetJson = map[widget.owner?.name]
+            val widgetJson = map[widget.name]
             widget.loadConfig(widgetJson)
         }
     }
@@ -105,7 +94,7 @@ object ModuleManager {
         val file = CONFIG_DIR.resolve("hud-positions.json")
 
         val map = widgets.associate { widget ->
-            widget.owner?.name to widget.saveConfig()
+            widget.name to widget.saveConfig()
         }
 
         Files.writeString(file, gson.toJson(map))
@@ -122,6 +111,4 @@ object ModuleManager {
 
         guiGraphics.pose().popMatrix()
     }
-
-    operator fun get(id: String): Module? = modulesById[id]
 }

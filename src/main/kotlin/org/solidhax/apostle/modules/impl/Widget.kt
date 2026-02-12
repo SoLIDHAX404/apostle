@@ -1,6 +1,5 @@
 package org.solidhax.apostle.modules.impl
 
-import com.google.gson.Gson
 import net.minecraft.client.gui.GuiGraphics
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.utils.isAreaHovered
@@ -36,6 +35,7 @@ enum class AnchorPoint {
 
 
 open class HudElement(
+    var name: String,
     var x: Int,
     var y: Int,
     var scale: Float,
@@ -50,7 +50,6 @@ open class HudElement(
         private set
     var height: Int = 0
         private set
-
 
     private val scaledWidth: Int get() = (width * scale).toInt()
     private val scaledHeight: Int get() = (height * scale).toInt()
