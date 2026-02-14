@@ -12,7 +12,8 @@
     "ClientLevelMixin",
     "ClientPacketListenerMixin",
     "EffectsInInventoryMixin",
-    "GuiMixin"
+    "GuiMixin",
+    "KeyBindingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

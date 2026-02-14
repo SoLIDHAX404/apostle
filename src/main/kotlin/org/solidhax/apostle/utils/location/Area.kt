@@ -24,4 +24,9 @@ enum class Area(val displayName: String) {
     BackwaterBayou("Backwater Bayou"),
     Galatea("Galatea"),
     Unknown("(Unknown)");
+
+    companion object {
+        fun withoutUnknown(): List<Area> =
+            entries.filter { it != Unknown }
+    }
 }

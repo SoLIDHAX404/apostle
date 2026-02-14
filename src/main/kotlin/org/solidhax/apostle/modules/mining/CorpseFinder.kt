@@ -77,9 +77,7 @@ object CorpseFinder : Module() {
             }
         }
 
-        on<WorldEvent.Unload> {
-            if(!enabled) return@on
-
+        on<WorldEvent.Load> {
             corpses.clear()
         }
     }

@@ -4,6 +4,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.Style
 import org.solidhax.apostle.Apostle.Companion.mc
 
+fun sendCommand(command: String) {
+    mc.execute { mc.player?.connection?.sendCommand(command) }
+}
+
 fun modMessage(message: Any?, prefix: String = "§9Apostle §8»§r ", chatStyle: Style? = null) {
     val text = Component.literal("$prefix$message")
     chatStyle?.let { text.setStyle(chatStyle) }

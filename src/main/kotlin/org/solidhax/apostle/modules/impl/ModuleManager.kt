@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.resources.ResourceLocation.fromNamespaceAndPath
-import org.solidhax.apostle.Apostle
+import org.solidhax.apostle.Apostle.Companion.CONFIG_DIR
+import org.solidhax.apostle.Apostle.Companion.HUD_LAYER
+import org.solidhax.apostle.Apostle.Companion.gson
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.event.ClientEvent
 import org.solidhax.apostle.event.impl.on
@@ -18,15 +18,11 @@ import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.ProtectItem
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
 import java.nio.file.Files
-import java.nio.file.Path
 
 object ModuleManager {
-    private val HUD_LAYER: ResourceLocation = fromNamespaceAndPath(Apostle.MOD_ID, "hud")
-    private val CONFIG_DIR: Path = Path.of("config/apostle")
 
     val modules: MutableList<Module> = mutableListOf()
     val widgets: List<HudElement> get() = modules.flatMap { module -> module.widgets }
-    val gson = Gson()
 
     init {
         on<ClientEvent.Start> {
