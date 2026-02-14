@@ -5,6 +5,7 @@ import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
+import org.solidhax.apostle.modules.skyblock.MobNametagHider
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
 import java.io.File
 
@@ -21,6 +22,7 @@ object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
 
             subcategory("Other") {
                 switch(DamageSplash::enabled, "Truncate Damage Numbers", "Truncates damage numbers in damage tags. ex: 120,000 -> 120k")
+                switch(MobNametagHider::enabled, "Hide Full HP Mob Nametags", "Hide nametags of full hp mobs.")
             }
         }
 

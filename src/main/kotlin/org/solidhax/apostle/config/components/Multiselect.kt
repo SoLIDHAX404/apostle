@@ -23,8 +23,8 @@ class MultiSelectDropdown(
     private val rowHeight = 14f
     private val maxListHeight = 90f
 
-    private val bgNormal = Color(0, 0, 0, 80)
-    private val bgHover = Color(255, 255, 255, 80)
+    private val bgNormal = Color(0, 0, 0, 255)
+    private val bgHover = Color(255, 255, 255, 255)
     private val textNormal = Color(14737632).toConstraint()
     private val textSelected = Color(16777120).toConstraint()
 

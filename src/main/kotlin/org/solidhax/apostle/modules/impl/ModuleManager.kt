@@ -15,6 +15,7 @@ import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
+import org.solidhax.apostle.modules.skyblock.MobNametagHider
 import org.solidhax.apostle.modules.skyblock.ProtectItem
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
 import java.nio.file.Files
@@ -26,7 +27,7 @@ object ModuleManager {
 
     init {
         on<ClientEvent.Start> {
-            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions, CorpseFinder).forEach { modules.add(it) }
+            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions, CorpseFinder, MobNametagHider).forEach { modules.add(it) }
 
             loadAllConfigs()
             loadHudPositions()
