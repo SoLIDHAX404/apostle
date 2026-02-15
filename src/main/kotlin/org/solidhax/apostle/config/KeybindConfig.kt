@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants
 import gg.essential.elementa.ElementaVersion
 import gg.essential.elementa.WindowScreen
 import gg.essential.elementa.components.ScrollComponent
+import gg.essential.elementa.components.UIBlock
 import gg.essential.elementa.components.UIContainer
 import gg.essential.elementa.components.UIText
 import gg.essential.elementa.components.input.UITextInput
@@ -11,25 +12,25 @@ import gg.essential.elementa.constraints.CenterConstraint
 import gg.essential.elementa.constraints.ChildBasedSizeConstraint
 import gg.essential.elementa.constraints.RelativeConstraint
 import gg.essential.elementa.constraints.SiblingConstraint
-import gg.essential.elementa.dsl.childOf
-import gg.essential.elementa.dsl.constrain
-import gg.essential.elementa.dsl.percent
-import gg.essential.elementa.dsl.pixels
-import gg.essential.elementa.dsl.plus
+import gg.essential.elementa.dsl.*
+import gg.essential.elementa.effects.OutlineEffect
 import gg.essential.universal.UKeyboard
+import gg.essential.vigilance.gui.VigilancePalette
+import gg.essential.vigilance.gui.settings.ButtonComponent
 import gg.essential.vigilance.gui.settings.CheckboxComponent
 import gg.essential.vigilance.utils.onLeftClick
 import org.solidhax.apostle.config.components.Button
 import org.solidhax.apostle.config.components.MultiSelectDropdown
-import org.solidhax.apostle.modules.macros.Keybind
-import org.solidhax.apostle.modules.macros.KeybindManager
+import org.solidhax.apostle.modules.keybinds.Keybind
+import org.solidhax.apostle.modules.keybinds.KeybindManager
 import org.solidhax.apostle.utils.location.Area
+import java.awt.Color
 
 object KeybindConfig : WindowScreen(ElementaVersion.V2) {
 
     private val scrollComponent: ScrollComponent
     private var clickedButton: Entry? = null
-    private val components = HashMap<UIContainer, Entry>()
+    private val components = HashMap<UIBlock, Entry>()
 
     init {
         UIText("Keybinds").childOf(window).constrain {
@@ -57,14 +58,14 @@ object KeybindConfig : WindowScreen(ElementaVersion.V2) {
             y = 0.pixels()
         }.onLeftClick {
             displayScreen(null)
-        }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f))
 
         Button("Add Shortcut").childOf(bottomButtons).constrain {
             x = SiblingConstraint(5f)
             y = 0.pixels()
         }.onLeftClick {
             addKeybindToList()
-        }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f))
 
         KeybindManager.keybinds.forEach { keybind ->
             addKeybindToList(keybind.command, keybind.key, keybind.locations, keybind.enabled)
@@ -72,12 +73,12 @@ object KeybindConfig : WindowScreen(ElementaVersion.V2) {
     }
 
     private fun addKeybindToList(command: String = "", key: InputConstants.Key = InputConstants.UNKNOWN, locations: List<String> = emptyList(), enabled: Boolean = true) {
-        val container = UIContainer().childOf(scrollComponent).constrain {
+        val container = UIBlock(VigilancePalette.getComponentBackground().toConstraint()).childOf(scrollComponent).constrain {
             x = CenterConstraint()
             y = SiblingConstraint(5f)
             width = 80.percent()
             height = 9.5.percent()
-        }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f))
 
         val toggle = CheckboxComponent(enabled).childOf(container).constrain {
             x = 5.pixels()
@@ -102,13 +103,13 @@ object KeybindConfig : WindowScreen(ElementaVersion.V2) {
             y = CenterConstraint()
             width = 140.pixels()
             height = 75.percent()
-        }.also { it.attachToRoot(window) }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f)).also { it.attachToRoot(window) }
 
         val keybindButton = Button(InputConstants.UNKNOWN.displayName.string).childOf(container).constrain {
             x = SiblingConstraint(7.5f)
             y = CenterConstraint()
             height = 75.percent()
-        }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f))
 
         Button("Remove").childOf(container).constrain {
             x = SiblingConstraint(7.5f)
@@ -117,7 +118,7 @@ object KeybindConfig : WindowScreen(ElementaVersion.V2) {
         }.onLeftClick {
             container.parent.removeChild(container)
             components.remove(container)
-        }
+        }.effect(OutlineEffect(VigilancePalette.getComponentBorder(), 1f))
 
         val entry = Entry(container, commandToRun, keybindButton, locations, key, toggle)
 
@@ -176,7 +177,7 @@ object KeybindConfig : WindowScreen(ElementaVersion.V2) {
         }
     }
 
-    data class Entry(val container: UIContainer, val input: UITextInput, val button: Button, val locationDropdown: MultiSelectDropdown, var key: InputConstants.Key, val toggle: CheckboxComponent) {
+    data class Entry(val container: UIBlock, val input: UITextInput, val button: Button, val locationDropdown: MultiSelectDropdown, var key: InputConstants.Key, val toggle: CheckboxComponent) {
         fun getDisplayName(): String = key.displayName.string
     }
 }

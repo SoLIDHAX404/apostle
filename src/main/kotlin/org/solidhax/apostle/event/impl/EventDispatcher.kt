@@ -6,13 +6,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
 import org.solidhax.apostle.Apostle.Companion.mc
-import org.solidhax.apostle.event.ChatPacketEvent
-import org.solidhax.apostle.event.ClientEvent
-import org.solidhax.apostle.event.PacketEvent
-import org.solidhax.apostle.event.RenderEvent
-import org.solidhax.apostle.event.TickEvent
-import org.solidhax.apostle.event.WorldEvent
+import org.solidhax.apostle.event.*
 import org.solidhax.apostle.utils.noControlCodes
+import org.solidhax.apostle.utils.render.RenderBatchManager
 
 object EventDispatcher {
     init {
@@ -25,7 +21,7 @@ object EventDispatcher {
         ClientTickEvents.START_WORLD_TICK.register { world -> TickEvent.Start(world).postAndCatch() }
         ClientTickEvents.END_WORLD_TICK.register { world -> TickEvent.End(world).postAndCatch() }
 
-        WorldRenderEvents.END_EXTRACTION.register { handler -> mc.level.let { RenderEvent.Extract(handler).postAndCatch() } }
+        WorldRenderEvents.END_EXTRACTION.register { handler -> mc.level.let { RenderEvent.Extract(handler, RenderBatchManager.renderConsumer).postAndCatch() } }
         WorldRenderEvents.END_MAIN.register { context -> mc.level.let { RenderEvent.Last(context).postAndCatch() } }
 
         on<PacketEvent.Receive> {

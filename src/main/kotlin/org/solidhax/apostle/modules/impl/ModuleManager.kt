@@ -1,6 +1,5 @@
 package org.solidhax.apostle.modules.impl
 
-import com.google.gson.Gson
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
 import net.minecraft.client.DeltaTracker
@@ -11,6 +10,7 @@ import org.solidhax.apostle.Apostle.Companion.gson
 import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.event.ClientEvent
 import org.solidhax.apostle.event.impl.on
+import org.solidhax.apostle.modules.farming.Trapper
 import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
@@ -27,7 +27,7 @@ object ModuleManager {
 
     init {
         on<ClientEvent.Start> {
-            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions, CorpseFinder, MobNametagHider).forEach { modules.add(it) }
+            listOf(RarityDisplay, DamageSplash, HUD, ProtectItem, Commissions, CorpseFinder, MobNametagHider, Trapper).forEach { modules.add(it) }
 
             loadAllConfigs()
             loadHudPositions()

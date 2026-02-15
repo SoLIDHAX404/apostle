@@ -1,5 +1,8 @@
 package org.solidhax.apostle.utils
 
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import org.solidhax.apostle.Apostle.Companion.mc
 
 inline val mouseX: Float
@@ -41,3 +44,21 @@ inline val String?.noControlCodes: String
 
         return String(out, 0, outPos)
     }
+
+inline val Entity.renderX: Double
+    get() =
+        xo + (x - xo) * mc.deltaTracker.getGameTimeDeltaPartialTick(true)
+
+inline val Entity.renderY: Double
+    get() =
+        yo + (y - yo) * mc.deltaTracker.getGameTimeDeltaPartialTick(true)
+
+inline val Entity.renderZ: Double
+    get() =
+        zo + (z - zo) * mc.deltaTracker.getGameTimeDeltaPartialTick(true)
+
+inline val Entity.renderPos: Vec3
+    get() = Vec3(renderX, renderY, renderZ)
+
+inline val Entity.renderBoundingBox: AABB
+    get() = boundingBox.move(renderX - x, renderY - y, renderZ - z)

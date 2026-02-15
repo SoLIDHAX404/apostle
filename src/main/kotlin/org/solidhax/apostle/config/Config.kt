@@ -1,12 +1,14 @@
 package org.solidhax.apostle.config
 
 import gg.essential.vigilance.Vigilant
+import org.solidhax.apostle.modules.farming.Trapper
 import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.mining.CorpseFinder
 import org.solidhax.apostle.modules.render.HUD
 import org.solidhax.apostle.modules.skyblock.DamageSplash
 import org.solidhax.apostle.modules.skyblock.MobNametagHider
 import org.solidhax.apostle.modules.skyblock.RarityDisplay
+import org.solidhax.apostle.utils.chat.modMessage
 import java.io.File
 
 object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
@@ -32,7 +34,19 @@ object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
             }
 
             subcategory("Mineshafts") {
-                switch(CorpseFinder::enabled, "Corpse Finder", "USE AT YOUR OWN RISK! Adds a ESP style box at every corpses position in a mineshaft.")
+                switch(CorpseFinder::enabled, "Corpse Finder", "Shows a box at every corpses position colored by type.")
+                switch(CorpseFinder::depthTest, "Depth Test", "USE AT YOUR OWN RISK! Show corpses through walls if disabled.")
+            }
+        }
+
+        category("Farming") {
+            subcategory("Trapper") {
+                switch(Trapper::enabled, "Highlight Trapper Mobs", "Highlight trapper mobs when found.")
+                switch(Trapper::depthTest, "Depth Test", "USE AT YOUR OWN RISK! Shows found entities through walls if disabled.")
+                switch(Trapper::showBoundingBox, "Show Bounding Box", "Shows the animals bounding box.")
+                switch(Trapper::showTracer, "Show Tracer", "Shows a tracer from the players position to the animal.")
+                switch(Trapper::showTitle, "Show Title", "Displays a title if a valid mob is found.")
+                switch(Trapper::playSound, "Play Sound", "Plays a sound if a valid mob is found.")
             }
         }
 

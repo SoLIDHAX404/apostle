@@ -1,12 +1,18 @@
 package org.solidhax.apostle.config.components
 
 import gg.essential.elementa.UIComponent
-import gg.essential.elementa.components.*
 import gg.essential.elementa.components.ScrollComponent
-import gg.essential.elementa.constraints.*
+import gg.essential.elementa.components.UIBlock
+import gg.essential.elementa.components.UIContainer
+import gg.essential.elementa.components.UIText
+import gg.essential.elementa.constraints.CenterConstraint
+import gg.essential.elementa.constraints.ChildBasedSizeConstraint
+import gg.essential.elementa.constraints.RelativeConstraint
+import gg.essential.elementa.constraints.SiblingConstraint
 import gg.essential.elementa.dsl.*
 import gg.essential.elementa.effects.ScissorEffect
 import gg.essential.universal.USound
+import gg.essential.vigilance.gui.VigilancePalette
 import gg.essential.vigilance.utils.onLeftClick
 import java.awt.Color
 
@@ -23,10 +29,10 @@ class MultiSelectDropdown(
     private val rowHeight = 14f
     private val maxListHeight = 90f
 
-    private val bgNormal = Color(0, 0, 0, 255)
-    private val bgHover = Color(255, 255, 255, 255)
-    private val textNormal = Color(14737632).toConstraint()
-    private val textSelected = Color(16777120).toConstraint()
+    private val bgNormal = VigilancePalette.getButton()
+    private val bgHover = VigilancePalette.getButtonHighlight()
+    private val textNormal = VigilancePalette.getText()
+    private val textSelected = VigilancePalette.getTextActive()
 
     private var root: UIComponent? = null
     private var rootClickHooked = false
@@ -38,12 +44,12 @@ class MultiSelectDropdown(
 
     private val headerText = UIText("").constrain {
         x = 6.pixels(); y = CenterConstraint()
-        textScale = 1.pixels(); color = textNormal
+        textScale = 1.pixels(); color = textNormal.toConstraint()
     } childOf header
 
     private val chevron = UIText("▾").constrain {
         x = 6.pixels(true); y = CenterConstraint()
-        color = textNormal
+        color = textNormal.toConstraint()
     } childOf header
 
     private val listHolder = UIBlock(bgNormal).constrain {
@@ -139,7 +145,7 @@ class MultiSelectDropdown(
 
             val text = UIText(opt).constrain {
                 x = 8.pixels(); y = CenterConstraint()
-                color = if (selected.contains(opt)) textSelected else textNormal
+                color = if (selected.contains(opt)) textSelected.toConstraint() else textNormal.toConstraint()
             } childOf row
 
             row.onMouseEnter { row.setColor(bgHover) }
@@ -147,7 +153,7 @@ class MultiSelectDropdown(
                 .onLeftClick {
                     USound.playButtonPress()
                     if (selected.contains(opt)) selected.remove(opt) else selected.add(opt)
-                    text.constrain { color = if (selected.contains(opt)) textSelected else textNormal }
+                    text.constrain { color = if (selected.contains(opt)) textSelected.toConstraint() else textNormal.toConstraint() }
                     refreshHeader()
                     onChange(getSelected())
                 }

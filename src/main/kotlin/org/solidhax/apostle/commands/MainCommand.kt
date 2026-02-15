@@ -6,7 +6,7 @@ import org.solidhax.apostle.Apostle.Companion.mc
 import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.config.KeybindConfig
 import org.solidhax.apostle.modules.impl.WidgetEditor
-import org.solidhax.apostle.modules.macros.KeybindManager
+import org.solidhax.apostle.modules.keybinds.KeybindManager
 import org.solidhax.apostle.utils.chat.modMessage
 import org.solidhax.apostle.utils.scheduler.schedule
 

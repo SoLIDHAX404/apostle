@@ -1,4 +1,4 @@
-package org.solidhax.apostle.modules.macros
+package org.solidhax.apostle.modules.keybinds
 
 import com.google.gson.reflect.TypeToken
 import com.mojang.blaze3d.platform.InputConstants
@@ -7,7 +7,6 @@ import org.solidhax.apostle.Apostle.Companion.gson
 import org.solidhax.apostle.event.ClientEvent
 import org.solidhax.apostle.event.InputEvent
 import org.solidhax.apostle.event.impl.on
-import org.solidhax.apostle.utils.chat.modMessage
 import org.solidhax.apostle.utils.chat.sendCommand
 import org.solidhax.apostle.utils.location.LocationUtils
 import java.nio.file.Files

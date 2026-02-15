@@ -1,6 +1,5 @@
 package org.solidhax.apostle.modules.skyblock
 
-import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.decoration.ArmorStand
 import org.solidhax.apostle.event.EntityEvent
 import org.solidhax.apostle.event.impl.on

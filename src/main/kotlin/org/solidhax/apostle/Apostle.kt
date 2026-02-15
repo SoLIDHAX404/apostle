@@ -12,9 +12,9 @@ import org.solidhax.apostle.config.Config
 import org.solidhax.apostle.event.impl.EventBus
 import org.solidhax.apostle.event.impl.EventDispatcher
 import org.solidhax.apostle.modules.impl.ModuleManager
-import org.solidhax.apostle.modules.macros.KeybindManager
+import org.solidhax.apostle.modules.keybinds.KeybindManager
 import org.solidhax.apostle.utils.location.LocationUtils
-import org.solidhax.apostle.utils.render.RenderUtils
+import org.solidhax.apostle.utils.render.RenderBatchManager
 import org.solidhax.apostle.utils.scheduler.TickScheduler
 import java.nio.file.Path
 
@@ -25,7 +25,7 @@ class Apostle : ClientModInitializer {
             mainCommand, protectItemCommand
         ).forEach { command -> command.register(dispatcher) } }
 
-        listOf(this, Config, EventDispatcher, RenderUtils, TickScheduler, LocationUtils, KeybindManager, ModuleManager).forEach { EventBus.subscribe(it) }
+        listOf(this, Config, EventDispatcher, RenderBatchManager, TickScheduler, LocationUtils, KeybindManager, ModuleManager).forEach { EventBus.subscribe(it) }
     }
 
     companion object {

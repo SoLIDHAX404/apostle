@@ -1,11 +1,9 @@
 package org.solidhax.apostle.modules.mining
 
-import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.phys.AABB
-import org.solidhax.apostle.event.ChatPacketEvent
 import org.solidhax.apostle.event.RenderEvent
 import org.solidhax.apostle.event.TickEvent
 import org.solidhax.apostle.event.WorldEvent
@@ -14,7 +12,8 @@ import org.solidhax.apostle.modules.impl.Module
 import org.solidhax.apostle.utils.location.Area
 import org.solidhax.apostle.utils.location.LocationUtils
 import org.solidhax.apostle.utils.render.Color
-import org.solidhax.apostle.utils.render.drawOutlineBox
+import org.solidhax.apostle.utils.render.drawStyledBox
+import org.solidhax.apostle.utils.render.drawWireFrameBox
 
 enum class CorpseType {
     LAPIS,
@@ -26,6 +25,7 @@ enum class CorpseType {
 object CorpseFinder : Module() {
 
     var enabled = false
+    var depthTest = true
 
     private val corpses = mutableMapOf<CorpseType, MutableSet<Entity>>()
 
@@ -72,7 +72,7 @@ object CorpseFinder : Module() {
                         (bp.x + 1).toDouble(), (bp.y + 1).toDouble(), (bp.z + 1).toDouble()
                     )
 
-                    drawOutlineBox(box, color)
+                    drawWireFrameBox(box, color, 3f, depthTest)
                 }
             }
         }

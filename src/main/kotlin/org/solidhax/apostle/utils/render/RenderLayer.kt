@@ -2,7 +2,7 @@ package org.solidhax.apostle.utils.render
 
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderType
-import java.util.OptionalDouble
+import java.util.*
 
 object RenderLayer {
 

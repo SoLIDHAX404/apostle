@@ -23,6 +23,10 @@ data class Color(val red: Int, val green: Int, val blue: Int, val alpha: Float =
         }
     }
 
+    fun multiplyAlpha(factor: Float): Color {
+        return Color(red, green, blue, (alpha * factor).coerceIn(0f, 1f))
+    }
+
     init {
         require(red in 0..255)
         require(green in 0..255)
