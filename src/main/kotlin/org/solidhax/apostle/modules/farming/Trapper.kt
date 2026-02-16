@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.decoration.ArmorStand
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
 import org.solidhax.apostle.event.RenderEvent
 import org.solidhax.apostle.event.TickEvent
@@ -41,7 +42,7 @@ object Trapper : Module() {
                 if(entityName == "Armor Stand" || !entity.isInvisible) return@forEach
                 if(!trapperMobs.any{ it in entityName }) return@forEach
 
-                mc.level?.getEntities(entity, entity.boundingBox.inflate(1.0).move(0.0, -1.0, 0.0)) { isValidEntity(it) && (!depthTest || mc.player?.hasLineOfSight(it) == true) }?.firstOrNull()?.let {
+                mc.level?.getEntities(entity, entity.boundingBox.inflate(0.5).move(0.0, -1.0, 0.0)) { isValidEntity(it) && (!depthTest || mc.player?.hasLineOfSight(it) == true) }?.firstOrNull()?.let {
                     if(entities.add(it)) {
                         if(showTitle) {
                             mc.gui.setTimes(0, 20, 5)
@@ -73,6 +74,7 @@ object Trapper : Module() {
     private fun isValidEntity(entity: Entity): Boolean =
         when (entity) {
             is ArmorStand -> false
+            is Player -> false
             else -> !entity.isInvisible && entity.isAlive
         }
 }
