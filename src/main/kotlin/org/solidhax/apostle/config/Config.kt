@@ -1,6 +1,9 @@
 package org.solidhax.apostle.config
 
 import gg.essential.vigilance.Vigilant
+import gg.essential.vigilance.data.Category
+import gg.essential.vigilance.data.PropertyData
+import gg.essential.vigilance.data.SortingBehavior
 import org.solidhax.apostle.modules.farming.Trapper
 import org.solidhax.apostle.modules.mining.Commissions
 import org.solidhax.apostle.modules.mining.CorpseFinder
@@ -11,7 +14,13 @@ import org.solidhax.apostle.modules.skyblock.RarityDisplay
 import org.solidhax.apostle.utils.chat.modMessage
 import java.io.File
 
-object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle") {
+private object NoSort : SortingBehavior() {
+    override fun getCategoryComparator() = Comparator<Category> { _, _ -> 0 }
+    override fun getSubcategoryComparator() = Comparator<Map.Entry<String, List<PropertyData>>> { _, _ -> 0 }
+    override fun getPropertyComparator() = Comparator<PropertyData> { _, _ -> 0 }
+}
+
+object Config : Vigilant(File("config/apostle/apostle.toml"), "Apostle", sortingBehavior = NoSort) {
 
     init {
 
