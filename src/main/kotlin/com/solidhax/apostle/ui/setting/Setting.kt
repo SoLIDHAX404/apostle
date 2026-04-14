@@ -1,9 +1,9 @@
 package com.solidhax.apostle.ui.setting
 
+import com.solidhax.apostle.modules.internal.Module
 import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-import com.solidhax.apostle.modules.internal.Module
 
 abstract class Setting<T>(
     val name: String,

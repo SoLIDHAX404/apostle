@@ -2,12 +2,9 @@ package com.solidhax.apostle
 
 import com.solidhax.apostle.commands.mainCommand
 import com.solidhax.apostle.events.EventDispatcher
-import com.solidhax.apostle.events.TickEvent
 import com.solidhax.apostle.modules.internal.ModuleManager
-import com.solidhax.apostle.utils.TickTask
 import com.solidhax.apostle.utils.TickTasks
 import meteordevelopment.orbit.EventBus
-import meteordevelopment.orbit.EventHandler
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.minecraft.client.Minecraft

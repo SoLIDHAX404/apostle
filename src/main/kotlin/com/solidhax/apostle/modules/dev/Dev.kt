@@ -9,7 +9,7 @@ object Dev : Module("Dev", "Dev Module to test all Settings", Category.DEV) {
 
     val exampleHud by HudSetting("Example Hud", "Module HUD", 8, 8, 1f, true) { preview ->
         val font = Minecraft.getInstance().font
-        val text = if (preview) "Example HUD" else "Live HUD"
+        val text = "Live HUD"
         drawString(font, text, 0, 0, 0xFFFFFFFF.toInt(), false)
         font.width(text) to font.lineHeight
     }

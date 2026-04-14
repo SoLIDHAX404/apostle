@@ -1,6 +1,5 @@
 package com.solidhax.apostle.utils
 
-import com.solidhax.apostle.Apostle.bus
 import com.solidhax.apostle.events.TickEvent
 import meteordevelopment.orbit.EventHandler
 import java.util.concurrent.CopyOnWriteArrayList

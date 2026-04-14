@@ -1,5 +1,6 @@
 package com.solidhax.apostle.ui.setting
 
+import com.solidhax.apostle.Apostle.mc
 import net.minecraft.client.gui.GuiGraphics
 
 class HudElement(
@@ -7,6 +8,7 @@ class HudElement(
     var y: Int,
     var scale: Float,
     var enabled: Boolean = true,
+    var alignment: HudAlignment = HudAlignment.LEFT,
     val render: GuiGraphics.(Boolean) -> Pair<Int, Int>
 ) {
     var width: Int = 0
@@ -16,8 +18,9 @@ class HudElement(
 
     fun draw(guiGraphics: GuiGraphics, preview: Boolean = false) {
         val pose = guiGraphics.pose()
+        val drawX = resolvedX()
         pose.pushMatrix()
-        pose.translate(x.toFloat(), y.toFloat())
+        pose.translate(drawX.toFloat(), y.toFloat())
         pose.scale(scale, scale)
 
         val (measuredWidth, measuredHeight) = guiGraphics.render(preview)
@@ -27,4 +30,17 @@ class HudElement(
         width = measuredWidth
         height = measuredHeight
     }
+
+    fun resolvedX(screenWidth: Int = mc.window.guiScaledWidth): Int {
+        val scaledWidth = scaledWidth()
+        return when (alignment) {
+            HudAlignment.LEFT -> x
+            HudAlignment.CENTER -> (screenWidth / 2f - scaledWidth / 2f + x).toInt()
+            HudAlignment.RIGHT -> screenWidth - scaledWidth - x
+        }
+    }
+
+    fun scaledWidth(): Int = (width * scale).toInt()
+
+    fun scaledHeight(): Int = (height * scale).toInt()
 }

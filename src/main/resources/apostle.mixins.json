@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "invoker.GuiInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

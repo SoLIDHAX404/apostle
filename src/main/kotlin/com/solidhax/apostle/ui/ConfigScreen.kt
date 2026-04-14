@@ -1,8 +1,6 @@
 package com.solidhax.apostle.ui
 
 import com.solidhax.apostle.modules.internal.Category
-import com.solidhax.apostle.modules.internal.ModuleManager
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.MouseButtonEvent

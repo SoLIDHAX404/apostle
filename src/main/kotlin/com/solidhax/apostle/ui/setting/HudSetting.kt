@@ -1,7 +1,9 @@
 package com.solidhax.apostle.ui.setting
 
+import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.modules.internal.Module
 import com.solidhax.apostle.ui.ClickGuiStyle
+import com.solidhax.apostle.ui.HudManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.input.MouseButtonEvent
@@ -15,11 +17,12 @@ class HudSetting(
     y: Int,
     scale: Float = 1f,
     enabled: Boolean = true,
+    alignment: HudAlignment = HudAlignment.LEFT,
     draw: GuiGraphics.(Boolean) -> Pair<Int, Int>
 ) : RenderableSetting<HudElement>(name, description) {
 
-    override val default: HudElement = HudElement(x, y, scale, enabled, draw)
-    override var value: HudElement = HudElement(x, y, scale, enabled, draw)
+    override val default: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
+    override var value: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
     private var owner: Module? = null
 
     val isEnabled: Boolean
@@ -53,13 +56,18 @@ class HudSetting(
     }
 
     override fun mouseClicked(mouseX: Float, mouseY: Float, click: MouseButtonEvent): Boolean {
-        if (click.button() != 0) {
-            return false
-        }
-
         val inside = mouseX >= lastX && mouseX <= lastX + width &&
             mouseY >= lastY && mouseY <= lastY + ClickGuiStyle.SETTING_ROW_HEIGHT
         if (!inside) {
+            return false
+        }
+
+        if (click.button() == 1) {
+            mc.setScreen(HudManager)
+            return true
+        }
+
+        if (click.button() != 0) {
             return false
         }
 
@@ -68,6 +76,6 @@ class HudSetting(
     }
 
     override fun reset() {
-        value = HudElement(default.x, default.y, default.scale, default.enabled, default.render)
+        value = HudElement(default.x, default.y, default.scale, default.enabled, default.alignment, default.render)
     }
 }
