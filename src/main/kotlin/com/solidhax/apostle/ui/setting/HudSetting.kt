@@ -16,13 +16,12 @@ class HudSetting(
     x: Int,
     y: Int,
     scale: Float = 1f,
-    enabled: Boolean = true,
-    alignment: HudAlignment = HudAlignment.LEFT,
+    enabled: Boolean = false,
     draw: GuiGraphics.(Boolean) -> Pair<Int, Int>
 ) : RenderableSetting<HudElement>(name, description) {
 
-    override val default: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
-    override var value: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
+    override val default: HudElement = HudElement(x, y, scale, enabled, draw)
+    override var value: HudElement = HudElement(x, y, scale, enabled, draw)
     private var owner: Module? = null
 
     val isEnabled: Boolean
@@ -76,6 +75,6 @@ class HudSetting(
     }
 
     override fun reset() {
-        value = HudElement(default.x, default.y, default.scale, default.enabled, default.alignment, default.render)
+        value = HudElement(default.x, default.y, default.scale, default.enabled, default.render)
     }
 }

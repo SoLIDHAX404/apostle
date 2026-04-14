@@ -3,7 +3,6 @@ package com.solidhax.apostle.ui
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.mixin.invoker.GuiInvoker
 import com.solidhax.apostle.modules.internal.ModuleManager
-import com.solidhax.apostle.ui.setting.HudAlignment
 import com.solidhax.apostle.ui.setting.HudSetting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -35,17 +34,9 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
 
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         findHoveredSetting(event.x().toFloat(), event.y().toFloat())?.let { setting ->
-            if (event.button() == 1) {
-                val currentLeft = resolvedLeft(setting)
-                setting.value.alignment = setting.value.alignment.next()
-                setting.value.x = xForAlignment(setting, currentLeft)
-                clampToScreen(setting, snapToGrid = false)
-                return true
-            }
-
             if (event.button() == 0) {
                 activeSetting = setting
-                dragOffsetX = event.x().toFloat() - resolvedLeft(setting)
+                dragOffsetX = event.x().toFloat() - setting.value.x
                 dragOffsetY = event.y().toFloat() - setting.value.y
                 return true
             }
@@ -61,8 +52,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         }
 
         activeSetting?.let { setting ->
-            val snappedLeft = snap((event.x().toFloat() - dragOffsetX).toInt())
-            setting.value.x = xForAlignment(setting, snappedLeft)
+            setting.value.x = snap((event.x().toFloat() - dragOffsetX).toInt())
             setting.value.y = snap((event.y().toFloat() - dragOffsetY).toInt())
             clampToScreen(setting)
             return true
@@ -111,7 +101,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         ModuleManager.hudSettings.forEach { setting ->
             setting.value.draw(guiGraphics, preview = true)
             val hovered = isHovered(setting, mouseX, mouseY)
-            val left = resolvedLeft(setting)
+            val left = setting.value.x
             val top = setting.value.y
             val elementWidth = scaledWidth(setting)
             val elementHeight = scaledHeight(setting)
@@ -125,14 +115,6 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
             guiGraphics.fill(left - 1, top + elementHeight, left + elementWidth + 1, top + elementHeight + 1, borderColor)
             guiGraphics.fill(left - 1, top, left, top + elementHeight, borderColor)
             guiGraphics.fill(left + elementWidth, top, left + elementWidth + 1, top + elementHeight, borderColor)
-
-            val font = Minecraft.getInstance().font
-            val alignmentLabel = when (setting.value.alignment) {
-                HudAlignment.LEFT -> "L"
-                HudAlignment.CENTER -> "C"
-                HudAlignment.RIGHT -> "R"
-            }
-            guiGraphics.drawString(font, alignmentLabel, left + elementWidth + 4, top - 1, ClickGuiStyle.MUTED_TEXT, false)
         }
     }
 
@@ -141,7 +123,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
     }
 
     private fun isHovered(setting: HudSetting, mouseX: Float, mouseY: Float): Boolean {
-        val left = resolvedLeft(setting)
+        val left = setting.value.x
         val top = setting.value.y
         val right = left + scaledWidth(setting)
         val bottom = top + scaledHeight(setting)
@@ -156,30 +138,11 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         return max(1, setting.value.scaledHeight())
     }
 
-    private fun clampToScreen(setting: HudSetting, snapToGrid: Boolean = true) {
+    private fun clampToScreen(setting: HudSetting) {
         val maxY = (height - scaledHeight(setting)).coerceAtLeast(0)
-        val clampedY = setting.value.y.coerceIn(0, maxY)
-        setting.value.y = if (snapToGrid) snap(clampedY).coerceIn(0, maxY) else clampedY
-
-        val elementWidth = scaledWidth(setting)
-        when (setting.value.alignment) {
-            HudAlignment.LEFT, HudAlignment.RIGHT -> {
-                val maxOffset = (width - elementWidth).coerceAtLeast(0)
-                val clampedX = setting.value.x.coerceIn(0, maxOffset)
-                setting.value.x = if (snapToGrid) snap(clampedX).coerceIn(0, maxOffset) else clampedX
-            }
-            HudAlignment.CENTER -> {
-                val baseLeft = width / 2f - elementWidth / 2f
-                val minOffset = -baseLeft
-                val maxOffset = width - elementWidth - baseLeft
-                val clampedX = setting.value.x.coerceIn(minOffset.toInt(), maxOffset.toInt())
-                setting.value.x = if (snapToGrid) {
-                    snap(clampedX).coerceIn(minOffset.toInt(), maxOffset.toInt())
-                } else {
-                    clampedX
-                }
-            }
-        }
+        val maxX = (width - scaledWidth(setting)).coerceAtLeast(0)
+        setting.value.x = snap(setting.value.x.coerceIn(0, maxX)).coerceIn(0, maxX)
+        setting.value.y = snap(setting.value.y.coerceIn(0, maxY)).coerceIn(0, maxY)
     }
 
     private fun renderCrosshair(guiGraphics: GuiGraphics) {
@@ -190,16 +153,4 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         return (value.toFloat() / GRID_SIZE).roundToInt() * GRID_SIZE
     }
 
-    private fun resolvedLeft(setting: HudSetting): Int {
-        return setting.value.resolvedX(width)
-    }
-
-    private fun xForAlignment(setting: HudSetting, left: Int): Int {
-        val elementWidth = scaledWidth(setting)
-        return when (setting.value.alignment) {
-            HudAlignment.LEFT -> left
-            HudAlignment.CENTER -> (left - (width / 2f - elementWidth / 2f)).toInt()
-            HudAlignment.RIGHT -> width - elementWidth - left
-        }
-    }
 }
