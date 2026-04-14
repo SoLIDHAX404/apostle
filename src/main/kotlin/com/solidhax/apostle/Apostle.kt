@@ -22,6 +22,8 @@ object Apostle : ClientModInitializer {
         }
     }
 
+    const val MOD_ID = "apostle"
+
     override fun onInitializeClient() {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             arrayOf(mainCommand).forEach { commodore -> commodore.register(dispatcher) }
