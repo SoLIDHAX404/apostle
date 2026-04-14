@@ -31,7 +31,6 @@ class DropdownSetting<T>(
         get() = selectedOptions.toSet()
     private val headerHeight = 22
     private val optionHeight = ClickGuiStyle.SETTING_ROW_HEIGHT
-    private val rowInset = 4
 
     override val height: Int
         get() = headerHeight + if (expanded) options.size * optionHeight else 0
@@ -52,10 +51,12 @@ class DropdownSetting<T>(
             selectedValueOrNull?.let(formatter) ?: emptyLabel
         }
         val labelColor = if (hasSelection) ClickGuiStyle.TITLE else ClickGuiStyle.MUTED_TEXT
+        val previewMaxWidth = (right - 26) - (left + 8 + font.width(name) + 10)
+        val previewLabel = truncateToWidth(font, currentLabel, previewMaxWidth)
 
         guiGraphics.fill(left, top, right, headerBottom, if (hoveredHeader) 0x70334759 else 0x50273444)
         guiGraphics.drawString(font, name, left + 8, top + 7, ClickGuiStyle.SOFT_TEXT, false)
-        guiGraphics.drawString(font, currentLabel, right - 22 - font.width(currentLabel), top + 7, labelColor, false)
+        guiGraphics.drawString(font, previewLabel, right - 22 - font.width(previewLabel), top + 7, labelColor, false)
         guiGraphics.drawString(font, if (expanded) "-" else "+", right - 12, top + 7, ClickGuiStyle.SOFT_TEXT, false)
 
         if (!expanded) {
@@ -81,9 +82,15 @@ class DropdownSetting<T>(
                 }
             )
 
-            guiGraphics.fill(right - 22, optionTop + rowInset, right - 8, optionBottom - rowInset, if (selected) ClickGuiStyle.withAlpha(ClickGuiStyle.SUCCESS, 180) else 0x90404C57.toInt())
-            guiGraphics.fill(right - 20, optionTop + rowInset + 1, right - 10, optionBottom - rowInset - 1, if (selected) ClickGuiStyle.TITLE else 0xFF2A3440.toInt())
+            val trackLeft = right - 34
+            val trackRight = right - 10
+            val trackTop = optionTop + 4
+            val trackBottom = optionBottom - 4
+            val knobLeft = if (selected) trackRight - 10 else trackLeft + 1
+
             guiGraphics.drawString(font, optionLabel, left + 12, optionTop + 5, if (selected) ClickGuiStyle.TITLE else ClickGuiStyle.SOFT_TEXT, false)
+            guiGraphics.fill(trackLeft, trackTop, trackRight, trackBottom, if (selected) ClickGuiStyle.withAlpha(ClickGuiStyle.SUCCESS, 180) else 0x90404C57.toInt())
+            guiGraphics.fill(knobLeft, trackTop + 1, knobLeft + 9, trackBottom - 1, ClickGuiStyle.TITLE)
         }
     }
 
@@ -131,5 +138,24 @@ class DropdownSetting<T>(
     private fun isWithin(mouseX: Float, mouseY: Float, top: Int, bottom: Int): Boolean {
         return mouseX >= lastX && mouseX <= lastX + width &&
             mouseY >= top && mouseY <= bottom
+    }
+
+    private fun truncateToWidth(font: net.minecraft.client.gui.Font, text: String, maxWidth: Int): String {
+        if (maxWidth <= 0 || font.width(text) <= maxWidth) {
+            return text
+        }
+
+        val ellipsis = "..."
+        val ellipsisWidth = font.width(ellipsis)
+        if (ellipsisWidth >= maxWidth) {
+            return ellipsis
+        }
+
+        var truncated = text
+        while (truncated.isNotEmpty() && font.width(truncated) + ellipsisWidth > maxWidth) {
+            truncated = truncated.dropLast(1)
+        }
+
+        return truncated + ellipsis
     }
 }

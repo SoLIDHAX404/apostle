@@ -1,7 +1,5 @@
 package com.solidhax.apostle.modules.internal
 
-import com.solidhax.apostle.modules.dev.Dev
-import com.solidhax.apostle.modules.dev.Test
 import net.fabricmc.loader.api.FabricLoader
 import tech.thatgravyboat.skyblockapi.utils.extentions.enumMapOf
 import java.util.EnumMap
@@ -11,7 +9,7 @@ object ModuleManager {
     val modulesByCategory: EnumMap<Category, ArrayList<Module>> = enumMapOf()
 
     init {
-        registerModules(Dev, Test)
+        registerModules()
     }
 
     fun registerModules(vararg modules: Module) {
