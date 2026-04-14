@@ -4,7 +4,6 @@ import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.mixin.invoker.GuiInvoker
 import com.solidhax.apostle.modules.internal.ModuleManager
 import com.solidhax.apostle.ui.setting.HudSetting
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.input.MouseButtonEvent
@@ -79,6 +78,11 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         }
 
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+    }
+
+    override fun onClose() {
+        ModuleManager.saveConfigurations()
+        super.onClose()
     }
 
     private fun renderBackdrop(guiGraphics: GuiGraphics) {

@@ -1,5 +1,8 @@
 package com.solidhax.apostle.ui.setting
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
 import com.solidhax.apostle.ui.ClickGuiStyle
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -13,7 +16,7 @@ class SliderSetting(
     private val min: Float,
     private val max: Float,
     private val step: Float = 0.1f
-) : RenderableSetting<Float>(name, description) {
+) : RenderableSetting<Float>(name, description), Savable {
     override val height: Int = 30
 
     init {
@@ -106,4 +109,10 @@ class SliderSetting(
             String.format(java.util.Locale.US, "%.2f", rounded).trimEnd('0').trimEnd('.')
         }
     }
+
+    override fun read(element: JsonElement, gson: Gson) {
+        value = element.asFloat
+    }
+
+    override fun write(gson: Gson): JsonElement = JsonPrimitive(value)
 }

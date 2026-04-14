@@ -1,5 +1,6 @@
 package com.solidhax.apostle.ui.setting
 
+import com.google.gson.*
 import com.solidhax.apostle.ui.ClickGuiStyle
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -13,7 +14,7 @@ class DropdownSetting<T>(
     private val multiSelect: Boolean = false,
     private val emptyLabel: String = "None",
     private val formatter: (T) -> String = { it.toString() }
-) : RenderableSetting<T>(name, description) {
+) : RenderableSetting<T>(name, description), Savable {
 
     init {
         require(options.isNotEmpty()) { "options must not be empty" }
@@ -157,5 +158,40 @@ class DropdownSetting<T>(
         }
 
         return truncated + ellipsis
+    }
+
+    override fun read(element: JsonElement, gson: Gson) {
+        val obj = element.takeIf { it.isJsonObject }?.asJsonObject ?: return
+        selectedOptions.clear()
+
+        if (multiSelect) {
+            obj.get("selected")
+                ?.takeIf { it.isJsonArray }
+                ?.asJsonArray
+                ?.mapNotNull { entry -> options.getOrNull(entry.asInt) }
+                ?.forEach { selectedOptions.add(it) }
+        } else {
+            val selectedIndex = obj.get("selected")?.takeIf { it.isJsonPrimitive }?.asInt
+            selectedIndex?.let { index ->
+                options.getOrNull(index)?.let { selectedOptions.add(it) }
+            }
+        }
+
+        value = selectedOptions.firstOrNull() ?: default
+    }
+
+    override fun write(gson: Gson): JsonElement = JsonObject().apply {
+        addProperty("multiSelect", multiSelect)
+        if (multiSelect) {
+            add("selected", JsonArray().apply {
+                selectedOptions.mapNotNull { option -> options.indexOf(option).takeIf { it >= 0 } }
+                    .forEach { index -> add(index) }
+            })
+        } else {
+            val selectedIndex = selectedValueOrNull?.let { selected ->
+                options.indexOf(selected).takeIf { it >= 0 }
+            }
+            add("selected", selectedIndex?.let(::JsonPrimitive) ?: JsonNull.INSTANCE)
+        }
     }
 }

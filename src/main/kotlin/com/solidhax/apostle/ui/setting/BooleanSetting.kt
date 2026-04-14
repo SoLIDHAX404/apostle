@@ -1,5 +1,8 @@
 package com.solidhax.apostle.ui.setting
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
 import com.solidhax.apostle.ui.ClickGuiStyle
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -9,7 +12,7 @@ class BooleanSetting(
     name: String,
     description: String = "",
     override val default: Boolean = false
-) : RenderableSetting<Boolean>(name, description) {
+) : RenderableSetting<Boolean>(name, description), Savable {
     override var value: Boolean = default
 
     override fun render(guiGraphics: GuiGraphics, x: Float, y: Float, mouseX: Float, mouseY: Float) {
@@ -47,4 +50,10 @@ class BooleanSetting(
         value = !value
         return true
     }
+
+    override fun read(element: JsonElement, gson: Gson) {
+        value = element.asBoolean
+    }
+
+    override fun write(gson: Gson): JsonElement = JsonPrimitive(value)
 }

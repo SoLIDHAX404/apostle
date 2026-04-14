@@ -1,5 +1,8 @@
 package com.solidhax.apostle.ui.setting
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.modules.internal.Module
 import com.solidhax.apostle.ui.ClickGuiStyle
@@ -18,7 +21,7 @@ class HudSetting(
     scale: Float = 1f,
     enabled: Boolean = false,
     draw: GuiGraphics.(Boolean) -> Pair<Int, Int>
-) : RenderableSetting<HudElement>(name, description) {
+) : RenderableSetting<HudElement>(name, description), Savable {
 
     override val default: HudElement = HudElement(x, y, scale, enabled, draw)
     override var value: HudElement = HudElement(x, y, scale, enabled, draw)
@@ -76,5 +79,20 @@ class HudSetting(
 
     override fun reset() {
         value = HudElement(default.x, default.y, default.scale, default.enabled, default.render)
+    }
+
+    override fun read(element: JsonElement, gson: Gson) {
+        val obj = element.takeIf { it.isJsonObject }?.asJsonObject ?: return
+        value.x = obj.get("x")?.asInt ?: value.x
+        value.y = obj.get("y")?.asInt ?: value.y
+        value.scale = obj.get("scale")?.asFloat ?: value.scale
+        value.enabled = obj.get("enabled")?.asBoolean ?: value.enabled
+    }
+
+    override fun write(gson: Gson): JsonElement = JsonObject().apply {
+        addProperty("x", value.x)
+        addProperty("y", value.y)
+        addProperty("scale", value.scale)
+        addProperty("enabled", value.enabled)
     }
 }

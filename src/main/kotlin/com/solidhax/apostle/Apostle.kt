@@ -8,6 +8,7 @@ import meteordevelopment.orbit.EventBus
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.minecraft.client.Minecraft
+import java.io.File
 import java.lang.invoke.MethodHandles
 
 object Apostle : ClientModInitializer {
@@ -16,6 +17,15 @@ object Apostle : ClientModInitializer {
     @JvmStatic val bus: EventBus = EventBus().apply {
         registerLambdaFactory("com.solidhax.apostle") { lookupInMethod, klass ->
             lookupInMethod.invoke(null, klass, MethodHandles.lookup()) as MethodHandles.Lookup
+        }
+    }
+
+    val configFile: File = File(mc.gameDirectory, "config/apostle/").apply {
+        try {
+            if (isFile) delete()
+            if (!exists()) mkdirs()
+        } catch (e: Exception) {
+            println("Error initializing module config\n${e.message}")
         }
     }
 
