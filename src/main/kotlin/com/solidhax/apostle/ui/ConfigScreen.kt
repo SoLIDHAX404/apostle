@@ -4,6 +4,8 @@ import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.ModuleManager
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import kotlin.math.max
@@ -77,6 +79,26 @@ object ConfigScreen : Screen(Component.literal("Apostle")) {
         }
 
         return super.mouseReleased(event)
+    }
+
+    override fun charTyped(characterEvent: CharacterEvent): Boolean {
+        panels.asReversed().forEach { panel ->
+            if (panel.charTyped(characterEvent)) {
+                return true
+            }
+        }
+
+        return super.charTyped(characterEvent)
+    }
+
+    override fun keyPressed(keyEvent: KeyEvent): Boolean {
+        panels.asReversed().forEach { panel ->
+            if (panel.keyPressed(keyEvent)) {
+                return true
+            }
+        }
+
+        return super.keyPressed(keyEvent)
     }
 
     override fun onClose() {

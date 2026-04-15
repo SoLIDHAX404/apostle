@@ -3,6 +3,7 @@ package com.solidhax.apostle.modules.mining
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.Module
+import com.solidhax.apostle.ui.setting.ColorSetting
 import com.solidhax.apostle.ui.setting.HudSetting
 import com.solidhax.apostle.utils.toMinecraftColor
 import tech.thatgravyboat.skyblockapi.api.area.mining.Commission
@@ -39,6 +40,8 @@ object Commissions : Module("Commissions", "Various features for Commissions", C
 
         width to height
     }
+
+    val color by ColorSetting("test", "test", Color.MAGENTA)
 
     private fun progressToColor(progress: Float): Color {
         return when {

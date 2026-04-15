@@ -6,6 +6,8 @@ import com.solidhax.apostle.modules.internal.ModuleManager
 import com.solidhax.apostle.ui.setting.RenderableSetting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.input.MouseButtonEvent
 import kotlin.math.floor
 
@@ -234,6 +236,46 @@ class Panel(private val category: Category, var x: Float, var y: Float) {
         }
 
         return handled
+    }
+
+    fun charTyped(characterEvent: CharacterEvent): Boolean {
+        if (collapsed) {
+            return false
+        }
+
+        for (module in ModuleManager.modulesByCategory[category].orEmpty()) {
+            if (!module.expanded) {
+                continue
+            }
+
+            for (setting in visibleRenderableSettings(module)) {
+                if (setting.charTyped(characterEvent)) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    fun keyPressed(keyEvent: KeyEvent): Boolean {
+        if (collapsed) {
+            return false
+        }
+
+        for (module in ModuleManager.modulesByCategory[category].orEmpty()) {
+            if (!module.expanded) {
+                continue
+            }
+
+            for (setting in visibleRenderableSettings(module)) {
+                if (setting.keyPressed(keyEvent)) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     fun mouseClicked(event: MouseButtonEvent): Boolean {
