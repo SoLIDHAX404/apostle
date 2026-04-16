@@ -4,6 +4,7 @@
   "package": "com.solidhax.apostle.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ConnectionMixin"
   ],
   "client": [
     "invoker.GuiInvoker"

@@ -31,8 +31,6 @@ repositories {
     maven("https://maven.meteordev.org/releases")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://maven.terraformersmc.com/")
-    maven("https://maven.teamresourceful.com/repository/maven-public/")
-    maven("https://repo.hypixel.net/repository/Hypixel/")
 }
 
 dependencies {
@@ -46,19 +44,10 @@ dependencies {
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
     implementation("meteordevelopment:orbit:${property("orbit_version")}")
-    modImplementation("net.hypixel:mod-api:${property("hypixel-modapi")}")
-    modImplementation("maven.modrinth:hypixel-mod-api:${property("hypixel-modapi-fabric")}")
 
     property("commodore_version").let {
         implementation("com.github.stivais:Commodore:$it")
         include("com.github.stivais:Commodore:$it")
-    }
-
-    api("tech.thatgravyboat:skyblock-api:${project.property("skyblock_api_version")}") {
-        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${project.property("minecraft_version")}") }
-    }
-    include("tech.thatgravyboat:skyblock-api:${project.property("skyblock_api_version")}") {
-        capabilities { requireCapability("tech.thatgravyboat:skyblock-api-${project.property("minecraft_version")}-remapped") }
     }
 }
 

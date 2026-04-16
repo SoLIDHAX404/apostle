@@ -14,13 +14,12 @@ import net.minecraft.client.DeltaTracker
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.Identifier.fromNamespaceAndPath
-import tech.thatgravyboat.skyblockapi.utils.extentions.enumMapOf
 import java.io.File
 import java.util.*
 
 object ModuleManager {
     val modules: MutableList<Module> = mutableListOf()
-    val modulesByCategory: EnumMap<Category, ArrayList<Module>> = enumMapOf()
+    val modulesByCategory: EnumMap<Category, ArrayList<Module>> = EnumMap(Category::class.java)
     val configs: ArrayList<ModuleConfig> = arrayListOf()
 
     private val HUD_LAYER: Identifier = fromNamespaceAndPath(Apostle.MOD_ID, "hud")
@@ -31,7 +30,9 @@ object ModuleManager {
             .toList()
 
     init {
-        registerModules(ModuleConfig(file = File(Apostle.configFile, "config.json")), Dev, Commissions)
+        registerModules(ModuleConfig(file = File(Apostle.configFile, "config.json")),
+            Dev, Commissions
+        )
 
         HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)
     }

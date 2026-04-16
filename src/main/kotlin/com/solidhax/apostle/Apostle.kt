@@ -1,5 +1,7 @@
 package com.solidhax.apostle
 
+import com.solidhax.apostle.api.MiningAPI
+import com.solidhax.apostle.api.TabListAPI
 import com.solidhax.apostle.commands.mainCommand
 import com.solidhax.apostle.events.EventDispatcher
 import com.solidhax.apostle.modules.internal.ModuleManager
@@ -36,6 +38,6 @@ object Apostle : ClientModInitializer {
             arrayOf(mainCommand).forEach { commodore -> commodore.register(dispatcher) }
         }
 
-        listOf(EventDispatcher, ModuleManager, TickTasks).forEach { bus.subscribe(it) }
+        listOf(EventDispatcher, ModuleManager, TickTasks, TabListAPI, MiningAPI).forEach { bus.subscribe(it) }
     }
 }
