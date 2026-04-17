@@ -2,6 +2,7 @@ package com.solidhax.apostle.modules.mining
 
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.api.MiningAPI
+import com.solidhax.apostle.api.MiningAPI.PickaxeAbility
 import com.solidhax.apostle.api.MiningAPI.Commission
 import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.Module
@@ -19,7 +20,7 @@ object Commissions : Module("Commissions", "Various features for Commissions", C
 
     private var activeCommissions: List<Commission> = emptyList()
 
-    val activeCommissionsHUD by HudSetting("Active Commissions", "Display all active commissions and their pogress.", 10, 10) { preview ->
+    val activeCommissionsHUD by HudSetting("Active Commissions", "Display all active commissions and their progress.", 10, 10) { preview ->
         activeCommissions = if(preview) exampleCommissions else MiningAPI.commissions
 
         var width = 0

@@ -4,6 +4,7 @@ import com.solidhax.apostle.Apostle
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.modules.dev.Dev
 import com.solidhax.apostle.modules.mining.Commissions
+import com.solidhax.apostle.modules.mining.PickaxeAbility
 import com.solidhax.apostle.ui.ConfigScreen
 import com.solidhax.apostle.ui.HudManager
 import com.solidhax.apostle.ui.setting.HudSetting
@@ -31,7 +32,7 @@ object ModuleManager {
 
     init {
         registerModules(ModuleConfig(file = File(Apostle.configFile, "config.json")),
-            Dev, Commissions
+            Dev, Commissions, PickaxeAbility
         )
 
         HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)
