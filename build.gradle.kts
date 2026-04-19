@@ -43,7 +43,12 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    implementation("meteordevelopment:orbit:${property("orbit_version")}")
+
+    property("orbit_version").let {
+        implementation("meteordevelopment:orbit:${property("orbit_version")}")
+        include("meteordevelopment:orbit:${property("orbit_version")}")
+
+    }
 
     property("commodore_version").let {
         implementation("com.github.stivais:Commodore:$it")

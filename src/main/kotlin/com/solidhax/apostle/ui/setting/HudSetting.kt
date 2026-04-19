@@ -20,11 +20,12 @@ class HudSetting(
     y: Int,
     scale: Float = 1f,
     enabled: Boolean = false,
+    alignment: HudAlignment = HudAlignment.LEFT,
     draw: GuiGraphics.(Boolean) -> Pair<Int, Int>
 ) : RenderableSetting<HudElement>(name, description), Savable {
 
-    override val default: HudElement = HudElement(x, y, scale, enabled, draw)
-    override var value: HudElement = HudElement(x, y, scale, enabled, draw)
+    override val default: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
+    override var value: HudElement = HudElement(x, y, scale, enabled, alignment, draw)
     private var owner: Module? = null
 
     val isEnabled: Boolean
@@ -78,7 +79,7 @@ class HudSetting(
     }
 
     override fun reset() {
-        value = HudElement(default.x, default.y, default.scale, default.enabled, default.render)
+        value = HudElement(default.x, default.y, default.scale, default.enabled, default.alignment, default.render)
     }
 
     override fun read(element: JsonElement, gson: Gson) {
@@ -87,6 +88,9 @@ class HudSetting(
         value.y = obj.get("y")?.asInt ?: value.y
         value.scale = obj.get("scale")?.asFloat ?: value.scale
         value.enabled = obj.get("enabled")?.asBoolean ?: value.enabled
+        value.alignment = obj.get("alignment")?.asString
+            ?.let { runCatching { enumValueOf<HudAlignment>(it) }.getOrNull() }
+            ?: value.alignment
     }
 
     override fun write(gson: Gson): JsonElement = JsonObject().apply {
@@ -94,5 +98,6 @@ class HudSetting(
         addProperty("y", value.y)
         addProperty("scale", value.scale)
         addProperty("enabled", value.enabled)
+        addProperty("alignment", value.alignment.name)
     }
 }

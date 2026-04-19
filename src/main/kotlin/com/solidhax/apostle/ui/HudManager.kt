@@ -3,6 +3,7 @@ package com.solidhax.apostle.ui
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.mixin.invoker.GuiInvoker
 import com.solidhax.apostle.modules.internal.ModuleManager
+import com.solidhax.apostle.ui.setting.HudAlignment
 import com.solidhax.apostle.ui.setting.HudSetting
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -35,8 +36,15 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         findHoveredSetting(event.x().toFloat(), event.y().toFloat())?.let { setting ->
             if (event.button() == 0) {
                 activeSetting = setting
-                dragOffsetX = event.x().toFloat() - setting.value.x
+                dragOffsetX = event.x().toFloat() - setting.value.left()
                 dragOffsetY = event.y().toFloat() - setting.value.y
+                return true
+            }
+            if (event.button() == 1) {
+                val left = setting.value.left()
+                setting.value.alignment = setting.value.alignment.next()
+                setting.value.setLeft(left)
+                clampToScreen(setting)
                 return true
             }
         }
@@ -51,7 +59,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         }
 
         activeSetting?.let { setting ->
-            setting.value.x = snap((event.x().toFloat() - dragOffsetX).toInt())
+            setting.value.setLeft(snap((event.x().toFloat() - dragOffsetX).toInt()))
             setting.value.y = snap((event.y().toFloat() - dragOffsetY).toInt())
             clampToScreen(setting)
             return true
@@ -105,7 +113,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
         ModuleManager.hudSettings.forEach { setting ->
             setting.value.draw(guiGraphics, preview = true)
             val hovered = isHovered(setting, mouseX, mouseY)
-            val left = setting.value.x
+            val left = setting.value.left()
             val top = setting.value.y
             val elementWidth = scaledWidth(setting)
             val elementHeight = scaledHeight(setting)
@@ -119,6 +127,14 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
             guiGraphics.fill(left - 1, top + elementHeight, left + elementWidth + 1, top + elementHeight + 1, borderColor)
             guiGraphics.fill(left - 1, top, left, top + elementHeight, borderColor)
             guiGraphics.fill(left + elementWidth, top, left + elementWidth + 1, top + elementHeight, borderColor)
+
+            val font = mc.font
+            val alignmentLabel = when (setting.value.alignment) {
+                HudAlignment.LEFT -> "LEFT"
+                HudAlignment.CENTER -> "CENTER"
+                HudAlignment.RIGHT -> "RIGHT"
+            }
+            guiGraphics.drawString(font, alignmentLabel, left, top - font.lineHeight - 3, ClickGuiStyle.MUTED_TEXT, false)
         }
     }
 
@@ -127,7 +143,7 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
     }
 
     private fun isHovered(setting: HudSetting, mouseX: Float, mouseY: Float): Boolean {
-        val left = setting.value.x
+        val left = setting.value.left()
         val top = setting.value.y
         val right = left + scaledWidth(setting)
         val bottom = top + scaledHeight(setting)
@@ -143,9 +159,12 @@ object HudManager : Screen(Component.literal("HUD Manager")) {
     }
 
     private fun clampToScreen(setting: HudSetting) {
-        val maxY = (height - scaledHeight(setting)).coerceAtLeast(0)
-        val maxX = (width - scaledWidth(setting)).coerceAtLeast(0)
-        setting.value.x = snap(setting.value.x.coerceIn(0, maxX)).coerceIn(0, maxX)
+        val elementWidth = scaledWidth(setting)
+        val elementHeight = scaledHeight(setting)
+        val maxY = (height - elementHeight).coerceAtLeast(0)
+        val maxLeft = (width - elementWidth).coerceAtLeast(0)
+        val clampedLeft = snap(setting.value.left().coerceIn(0, maxLeft)).coerceIn(0, maxLeft)
+        setting.value.setLeft(clampedLeft)
         setting.value.y = snap(setting.value.y.coerceIn(0, maxY)).coerceIn(0, maxY)
     }
 

@@ -1,10 +1,12 @@
 package com.solidhax.apostle
 
+import com.solidhax.apostle.api.LocationAPI
 import com.solidhax.apostle.api.MiningAPI
 import com.solidhax.apostle.api.TabListAPI
 import com.solidhax.apostle.commands.mainCommand
 import com.solidhax.apostle.events.EventDispatcher
 import com.solidhax.apostle.modules.internal.ModuleManager
+import com.solidhax.apostle.utils.RenderBatchManager
 import com.solidhax.apostle.utils.TickTasks
 import meteordevelopment.orbit.EventBus
 import net.fabricmc.api.ClientModInitializer
@@ -38,6 +40,6 @@ object Apostle : ClientModInitializer {
             arrayOf(mainCommand).forEach { commodore -> commodore.register(dispatcher) }
         }
 
-        listOf(EventDispatcher, ModuleManager, TickTasks, TabListAPI, MiningAPI).forEach { bus.subscribe(it) }
+        listOf(EventDispatcher, ModuleManager, TickTasks, RenderBatchManager, TabListAPI, LocationAPI, MiningAPI).forEach { bus.subscribe(it) }
     }
 }

@@ -26,23 +26,22 @@ object Commissions : Module("Commissions", "Various features for Commissions", C
         var width = 0
         val height = activeCommissions.size * mc.font.lineHeight
         activeCommissions.forEachIndexed { index, commission ->
-            val percent = commission.progress * 100f
-            val commissionProgressText = if (commission.progress == 100.0) "DONE" else "${commission.progress}%"
+            val commissionProgressText = if (commission.progress == 100.0) "§aDONE" else "${progressToColor(commission.progress)}${commission.progress}%"
 
             val line = "${commission.name}: $commissionProgressText"
-            drawString(mc.font, line, 0, index * mc.font.lineHeight, progressToColor(commission.progress).toMinecraftColor())
+            drawString(mc.font, line, 0, index * mc.font.lineHeight, Color.WHITE.toMinecraftColor())
             width = maxOf(width, mc.font.width(line))
         }
 
         width to height
     }
 
-    private fun progressToColor(progress: Double): Color {
+    private fun progressToColor(progress: Double): String {
         return when {
-            progress >= 75.0 -> Color.GREEN
-            progress >= 50.0 -> Color.YELLOW
-            progress >= 25.0 -> Color.ORANGE
-            else -> Color.RED
+            progress >= 75.0 -> "§a"
+            progress >= 50.0 -> "§e"
+            progress >= 25.0 -> "§6"
+            else -> "§c"
         }
     }
 }
