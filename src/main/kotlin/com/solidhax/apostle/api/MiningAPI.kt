@@ -10,9 +10,11 @@ import java.util.regex.Pattern
 object MiningAPI {
     var commissions: List<Commission> = emptyList()
     var pickaxeAbility: PickaxeAbility? = null
+    var pity: Pity? = null
 
     private val commissionRegex = Pattern.compile("^\\s*(?<name>[\\w\\s]+?):\\s*(?<progress>[\\d.]+%|\\w+)$")
     private val pickaxeAbilityRegex = Pattern.compile("(?<name>[^:]+): (?<cooldown>.+)")
+    val mineshaftRegex = Pattern.compile("^\\s*(?<name>Glacite\\s+Mineshafts)\\s*:\\s*(?<progress>\\d{1,3}(?:,\\d{3})*)/(?<needed>\\d{1,3}(?:,\\d{3})*)\\s*$")
 
     init {
         @EventHandler
@@ -20,6 +22,7 @@ object MiningAPI {
             when (event.widget) {
                 TabListAPI.TabWidget.COMMISSIONS -> commissions = parseCommissions(event.newContent)
                 TabListAPI.TabWidget.PICKAXE_ABILITY -> syncPickaxeAbility(parsePickaxeAbility(event.newContent))
+                TabListAPI.TabWidget.PITY -> pity = parsePity(event.newContent)
                 else -> return
             }
         }
@@ -29,6 +32,7 @@ object MiningAPI {
             when (event.widget) {
                 TabListAPI.TabWidget.COMMISSIONS -> commissions = parseCommissions(event.newContent)
                 TabListAPI.TabWidget.PICKAXE_ABILITY -> syncPickaxeAbility(parsePickaxeAbility(event.newContent))
+                TabListAPI.TabWidget.PITY -> pity = parsePity(event.newContent)
                 else -> return
             }
         }
@@ -38,6 +42,7 @@ object MiningAPI {
             when (event.widget) {
                 TabListAPI.TabWidget.COMMISSIONS -> commissions = emptyList()
                 TabListAPI.TabWidget.PICKAXE_ABILITY -> pickaxeAbility = null
+                TabListAPI.TabWidget.PITY -> pity = null
                 else -> return
             }
         }
@@ -97,8 +102,19 @@ object MiningAPI {
         }
     }
 
+    private fun parsePity(content: TabListAPI.WidgetContent): Pity? {
+        val match = content.data.firstNotNullOfOrNull { line -> mineshaftRegex.matcher(line).takeIf { it.find() } } ?: return null
+
+        return Pity(
+            match.group("name").trim(),
+            match.group("progress").replace(",", "").toInt(),
+            match.group("needed").replace(",", "").toInt()
+        )
+    }
+
     data class Commission(val name: String, val progress: Double)
     data class PickaxeAbility(val name: String, val cooldown: Double)
+    data class Pity(val name: String, val progress: Int, val needed: Int)
 
     private const val COOLDOWN_SECONDS_PER_TICK = 0.05
     private const val COOLDOWN_RESYNC_THRESHOLD = 0.25

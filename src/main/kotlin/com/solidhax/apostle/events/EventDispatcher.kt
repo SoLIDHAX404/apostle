@@ -1,9 +1,12 @@
 package com.solidhax.apostle.events
 
 import com.solidhax.apostle.utils.RenderBatchManager
+import com.solidhax.apostle.utils.noControlCodes
+import meteordevelopment.orbit.EventHandler
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket
 
 object EventDispatcher {
 
@@ -16,7 +19,13 @@ object EventDispatcher {
 
         WorldRenderEvents.END_EXTRACTION.register { handler -> RenderEvent.Extract(handler, RenderBatchManager.renderConsumer).post() }
         WorldRenderEvents.END_MAIN.register { context -> RenderEvent.Last(context).post() }
+
+        @EventHandler
+        fun onPacketReceive(event: PacketEvent.Receive) {
+            val packet = event.packet
+            if(packet !is ClientboundSystemChatPacket) return@onPacketReceive
+
+            if(!packet.overlay) ChatPacketEvent(packet.content.string.noControlCodes, packet.content).post()
+        }
     }
-
-
 }

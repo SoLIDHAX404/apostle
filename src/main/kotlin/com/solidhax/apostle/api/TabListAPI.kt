@@ -106,7 +106,7 @@ object TabListAPI {
 
     init {
         @EventHandler
-        fun onTickServer(event: TickEvent.Server) {
+        fun onTickEventEnd(event: TickEvent.End) {
             parseTabList()
         }
     }

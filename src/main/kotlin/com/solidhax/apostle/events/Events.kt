@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.AbstractWorldRenderCont
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldExtractionContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
 import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.network.chat.Component
+import net.minecraft.network.protocol.Packet
 
 interface TickEvent : Event {
     class Start(val world: ClientLevel) : TickEvent
@@ -42,3 +44,10 @@ interface WorldEvent : Event {
     object Load : WorldEvent
     object Unload : WorldEvent
 }
+
+abstract class PacketEvent(val packet: Packet<*>) : CancellableEvent() {
+    class Receive(packet: Packet<*>) : PacketEvent(packet)
+    class Send(packet: Packet<*>) : PacketEvent(packet)
+}
+
+class ChatPacketEvent(val value: String, val component: Component) : Event
