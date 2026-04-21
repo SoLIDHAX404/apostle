@@ -1,7 +1,17 @@
 package com.solidhax.apostle.api
 
+import com.solidhax.apostle.Apostle.mc
+import com.solidhax.apostle.events.PacketEvent
 import com.solidhax.apostle.events.TabListWidgetEvent
+import com.solidhax.apostle.events.WorldEvent
+import com.solidhax.apostle.utils.equalsOneOf
+import com.solidhax.apostle.utils.noControlCodes
+import com.solidhax.apostle.utils.startsWithOneOf
 import meteordevelopment.orbit.EventHandler
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket
+import net.minecraft.network.protocol.game.ClientboundSetObjectivePacket
+import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket
+import kotlin.jvm.optionals.getOrNull
 
 enum class Island(val displayName: String) {
     SinglePlayer("Singleplayer"),
@@ -31,17 +41,51 @@ enum class Island(val displayName: String) {
 
 object LocationAPI {
 
+    var isInSkyblock: Boolean = false
+        private set
+
     var currentArea: Island = Island.Unknown
         private set
 
+    var lobbyId: String? = null
+        private set
+
+    private val lobbyRegex = Regex("\\d\\d/\\d\\d/\\d\\d (\\w{0,6}) *")
+
     init {
         @EventHandler
-        fun onWidgetAdded(event: TabListWidgetEvent.Add) {
-            if(event.widget != TabListAPI.TabWidget.AREA) return
-
-            val area = event.newContent.header.substringAfterLast(": ")
-            currentArea = Island.entries.firstOrNull { area.contains(it.displayName, true) } ?: Island.Unknown
+        fun onReceivePacket(event: PacketEvent.Receive) {
+            when(event.packet) {
+                is ClientboundPlayerInfoUpdatePacket -> parseArea(event.packet)
+                is ClientboundSetObjectivePacket -> parseObjectiveName(event.packet)
+                is ClientboundSetPlayerTeamPacket -> parseLobby(event.packet)
+                else -> return
+            }
         }
+
+        @EventHandler
+        fun onWorldLoad(event: WorldEvent.Load) {
+            currentArea = if (mc.isSingleplayer) Island.SinglePlayer else Island.Unknown
+            isInSkyblock = false
+            lobbyId = null
+        }
+    }
+
+    private fun parseArea(packet: ClientboundPlayerInfoUpdatePacket) {
+        if (!isCurrentArea(Island.Unknown) || packet.actions().none { it.equalsOneOf(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME) }) return
+        val area = packet.entries().find { it.displayName?.string?.startsWithOneOf("Area: ", "Dungeon: ") == true }?.displayName?.string ?: return
+        currentArea = Island.entries.firstOrNull { area.contains(it.displayName, true) } ?: Island.Unknown
+    }
+
+    private fun parseObjectiveName(packet: ClientboundSetObjectivePacket) {
+        if (!isInSkyblock) isInSkyblock = packet.objectiveName == "SBScoreboard"
+    }
+
+    private fun parseLobby(packet: ClientboundSetPlayerTeamPacket) {
+        if (!isCurrentArea(Island.Unknown)) return
+        val text = packet.parameters.getOrNull()?.let { it.playerPrefix.string.plus(it.playerSuffix.string).noControlCodes } ?: return
+
+        lobbyRegex.find(text)?.groupValues?.get(1)?.let { lobbyId = it }
     }
 
     fun isCurrentArea(vararg areas: Island): Boolean =

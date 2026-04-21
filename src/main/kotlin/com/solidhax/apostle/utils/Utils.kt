@@ -28,6 +28,15 @@ inline val String?.noControlCodes: String
         return String(out, 0, outPos)
     }
 
+fun String.containsOneOf(options: Collection<String>, ignoreCase: Boolean = false): Boolean =
+    options.any { this.contains(it, ignoreCase) }
+
+fun String.startsWithOneOf(vararg options: String, ignoreCase: Boolean = false): Boolean =
+    options.any { this.startsWith(it, ignoreCase) }
+
+fun Any?.equalsOneOf(vararg options: Any?): Boolean =
+    options.any { this == it }
+
 inline val Entity.renderX: Double
     get() =
         xo + (x - xo) * mc.deltaTracker.getGameTimeDeltaPartialTick(true)
