@@ -3,9 +3,9 @@ package com.solidhax.apostle.api
 import com.solidhax.apostle.events.TabListWidgetEvent
 import com.solidhax.apostle.events.TickEvent
 import meteordevelopment.orbit.EventHandler
+import java.util.regex.Pattern
 import kotlin.math.abs
 import kotlin.math.max
-import java.util.regex.Pattern
 
 object MiningAPI {
     var commissions: List<Commission> = emptyList()
@@ -19,6 +19,8 @@ object MiningAPI {
     init {
         @EventHandler
         fun onWidgetAdded(event: TabListWidgetEvent.Add) {
+            if(!LocationAPI.isCurrentArea(*LocationAPI.miningIslands)) return
+
             when (event.widget) {
                 TabListAPI.TabWidget.COMMISSIONS -> commissions = parseCommissions(event.newContent)
                 TabListAPI.TabWidget.PICKAXE_ABILITY -> syncPickaxeAbility(parsePickaxeAbility(event.newContent))
@@ -29,6 +31,8 @@ object MiningAPI {
 
         @EventHandler
         fun onWidgetUpdated(event: TabListWidgetEvent.Update) {
+            if(!LocationAPI.isCurrentArea(*LocationAPI.miningIslands)) return
+
             when (event.widget) {
                 TabListAPI.TabWidget.COMMISSIONS -> commissions = parseCommissions(event.newContent)
                 TabListAPI.TabWidget.PICKAXE_ABILITY -> syncPickaxeAbility(parsePickaxeAbility(event.newContent))
@@ -103,10 +107,10 @@ object MiningAPI {
     }
 
     private fun parsePity(content: TabListAPI.WidgetContent): Pity? {
-        val match = content.data.firstNotNullOfOrNull { line -> mineshaftRegex.matcher(line).takeIf { it.find() } } ?: return null
+        val match = content.data.firstNotNullOfOrNull { line -> mineshaftRegex.matcher(line.trim()).takeIf { it.find() } } ?: return null
 
         return Pity(
-            match.group("name").trim(),
+            match.group("name"),
             match.group("progress").replace(",", "").toInt(),
             match.group("needed").replace(",", "").toInt()
         )

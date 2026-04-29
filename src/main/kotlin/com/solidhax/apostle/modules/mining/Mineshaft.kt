@@ -23,7 +23,6 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.phys.AABB
 import java.awt.Color
-import kotlin.collections.mutableSetOf
 
 enum class CorpseType {
     LAPIS,
@@ -62,12 +61,11 @@ object Mineshaft : Module("Mineshaft", "Various features for mineshafts", Catego
             if (!highlightCorpses && !highlightLittlefoot) return
 
             mc.level?.entitiesForRendering()?.forEach { e ->
-                val entity = e ?: return@forEach
-                if(!entity.isAlive || entity !is ArmorStand) return@forEach
+                if(!e.isAlive || e !is ArmorStand) return@forEach
 
-                val entityName = entity.name.string
-                if (entityName == "Armor Stand" && !entity.isInvisible) {
-                    val helmetName = entity.getItemBySlot(EquipmentSlot.HEAD).customName?.string
+                val entityName = e.name.string
+                if (entityName == "Armor Stand" && !e.isInvisible) {
+                    val helmetName = e.getItemBySlot(EquipmentSlot.HEAD).customName?.string
                     val type = when (helmetName) {
                         "Lapis Armor Helmet" -> CorpseType.LAPIS
                         "Mineral Helmet" -> CorpseType.TUNGSTEN
@@ -76,11 +74,11 @@ object Mineshaft : Module("Mineshaft", "Various features for mineshafts", Catego
                         else -> null
                     }
 
-                    if (type != null) corpses.getOrPut(type) { mutableSetOf() }.add(entity)
+                    if (type != null) corpses.getOrPut(type) { mutableSetOf() }.add(e)
                 }
 
-                if (entityName != "Armor Stand" && entity.isInvisible && entityName.contains("Littlefoot")) {
-                    mc.level?.getEntities(entity, entity.boundingBox.inflate(0.5).move(0.0, -1.0, 0.0)) { isValidEntity(it) }?.firstOrNull()?.let {
+                if (entityName != "Armor Stand" && e.isInvisible && entityName.contains("Littlefoot")) {
+                    mc.level?.getEntities(e, e.boundingBox.inflate(0.5).move(0.0, -1.0, 0.0)) { isValidEntity(it) }?.firstOrNull()?.let {
                         if (littlefoots.add(it)) {
                             alert("§cLITTLEFOOT!", false)
                             return@forEach

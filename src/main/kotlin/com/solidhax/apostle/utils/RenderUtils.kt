@@ -21,7 +21,6 @@ import java.awt.Color
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 internal data class LineData(val from: Vec3, val to: Vec3, val color1: Int, val color2: Int, val thickness: Float, val depth: Boolean)
 internal data class BoxData(val aabb: AABB, val r: Float, val g: Float, val b: Float, val a: Float, val thickness: Float, val depth: Boolean)

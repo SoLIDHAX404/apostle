@@ -2,7 +2,6 @@ package com.solidhax.apostle.modules.mining
 
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.api.MiningAPI
-import com.solidhax.apostle.api.MiningAPI.PickaxeAbility
 import com.solidhax.apostle.api.MiningAPI.Commission
 import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.Module

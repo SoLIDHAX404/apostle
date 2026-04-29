@@ -1,13 +1,9 @@
 package com.solidhax.apostle.modules.mining
 
 import com.solidhax.apostle.Apostle.mc
-import com.solidhax.apostle.api.Island
-import com.solidhax.apostle.api.LocationAPI
 import com.solidhax.apostle.api.MiningAPI
 import com.solidhax.apostle.api.MiningAPI.PickaxeAbility
 import com.solidhax.apostle.events.ChatPacketEvent
-import com.solidhax.apostle.events.Event
-import com.solidhax.apostle.events.TickEvent
 import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.Module
 import com.solidhax.apostle.ui.setting.BooleanSetting

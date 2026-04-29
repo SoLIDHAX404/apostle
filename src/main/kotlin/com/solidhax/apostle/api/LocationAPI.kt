@@ -2,7 +2,6 @@ package com.solidhax.apostle.api
 
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.events.PacketEvent
-import com.solidhax.apostle.events.TabListWidgetEvent
 import com.solidhax.apostle.events.WorldEvent
 import com.solidhax.apostle.utils.equalsOneOf
 import com.solidhax.apostle.utils.noControlCodes
@@ -49,6 +48,8 @@ object LocationAPI {
 
     var lobbyId: String? = null
         private set
+
+    val miningIslands: Array<Island> = arrayOf(Island.DwarvenMines, Island.CrystalHollows, Island.Mineshaft)
 
     private val lobbyRegex = Regex("\\d\\d/\\d\\d/\\d\\d (\\w{0,6}) *")
 

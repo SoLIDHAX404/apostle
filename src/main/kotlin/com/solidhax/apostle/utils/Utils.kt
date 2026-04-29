@@ -3,7 +3,6 @@ package com.solidhax.apostle.utils
 import com.solidhax.apostle.Apostle.mc
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import kotlin.reflect.KMutableProperty0
 
 inline val String?.noControlCodes: String
     get() {
