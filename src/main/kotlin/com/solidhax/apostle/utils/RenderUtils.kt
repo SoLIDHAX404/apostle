@@ -208,7 +208,7 @@ private fun PoseStack.renderQueuedTexts(consumer: List<TextData>, bufferSource: 
     }
 }
 
-fun RenderEvent.Extract.drawTracer(to: Vec3, color: Color, depth: Boolean, thickness: Float = 3f) {
+fun RenderEvent.Extract.drawTracer(to: Vec3, color: Color, depth: Boolean = false, thickness: Float = 3f) {
     val from = mc.player?.let { player ->
         player.renderPos.add(player.forward.add(0.0, player.eyeHeight.toDouble(), 0.0))
     } ?: return

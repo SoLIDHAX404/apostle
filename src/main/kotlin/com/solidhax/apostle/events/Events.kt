@@ -5,9 +5,12 @@ import com.solidhax.apostle.utils.RenderConsumer
 import net.fabricmc.fabric.api.client.rendering.v1.world.AbstractWorldRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldExtractionContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
+import net.minecraft.world.inventory.Slot
 
 interface TickEvent : Event {
     class Start(val world: ClientLevel) : TickEvent
@@ -38,6 +41,10 @@ interface TabListWidgetEvent : Event {
 abstract class RenderEvent(open val context: AbstractWorldRenderContext) : Event {
     class Extract(override val context: WorldExtractionContext, val consumer: RenderConsumer) : RenderEvent(context)
     class Last(override val context: WorldRenderContext) : RenderEvent(context)
+}
+
+abstract class GuiEvent(val screen: Screen) : CancellableEvent() {
+    class RenderSlot(screen: Screen, val guiGraphics: GuiGraphics, val slot: Slot) : GuiEvent(screen)
 }
 
 interface WorldEvent : Event {
