@@ -3,6 +3,7 @@ package com.solidhax.apostle.modules.internal
 import com.solidhax.apostle.Apostle
 import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.modules.dev.Dev
+import com.solidhax.apostle.modules.farming.FarmKeys
 import com.solidhax.apostle.modules.farming.PestESP
 import com.solidhax.apostle.modules.mining.Commissions
 import com.solidhax.apostle.modules.mining.Mineshaft
@@ -34,7 +35,7 @@ object ModuleManager {
 
     init {
         registerModules(ModuleConfig(file = File(Apostle.configFile, "config.json")),
-            Dev, Commissions, PickaxeAbility, Mineshaft, PestESP
+            Dev, Commissions, PickaxeAbility, Mineshaft, PestESP, FarmKeys
         )
 
         HudElementRegistry.attachElementBefore(VanillaHudElements.SLEEP, HUD_LAYER, ModuleManager::render)

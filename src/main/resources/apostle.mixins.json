@@ -8,6 +8,8 @@
   ],
   "client": [
     "AbstractContainerScreenMixin",
+    "KeyMappingMixin",
+    "accessor.KeyMappingAccessor",
     "invoker.GuiInvoker"
   ],
   "injectors": {
