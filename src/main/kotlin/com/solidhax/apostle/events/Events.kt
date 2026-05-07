@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
+import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 
 interface TickEvent : Event {
@@ -45,6 +46,7 @@ abstract class RenderEvent(open val context: AbstractWorldRenderContext) : Event
 
 abstract class GuiEvent(val screen: Screen) : CancellableEvent() {
     class RenderSlot(screen: Screen, val guiGraphics: GuiGraphics, val slot: Slot) : GuiEvent(screen)
+    class SlotClicked(screen: Screen, val slot: Slot, val clickType: ClickType) : GuiEvent(screen)
 }
 
 interface WorldEvent : Event {
@@ -58,3 +60,8 @@ abstract class PacketEvent(val packet: Packet<*>) : CancellableEvent() {
 }
 
 class ChatPacketEvent(val value: String, val component: Component) : Event
+
+abstract class VisitorEvent(val visitor: String) : Event {
+    class VisitorAccepted(visitor: String) : VisitorEvent(visitor)
+    class VisitorRefused(visitor: String) : VisitorEvent(visitor)
+}

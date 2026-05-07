@@ -1,5 +1,6 @@
 package com.solidhax.apostle
 
+import com.solidhax.apostle.api.GardenAPI
 import com.solidhax.apostle.api.LocationAPI
 import com.solidhax.apostle.api.MiningAPI
 import com.solidhax.apostle.api.TabListAPI
@@ -40,6 +41,7 @@ object Apostle : ClientModInitializer {
             arrayOf(mainCommand).forEach { commodore -> commodore.register(dispatcher) }
         }
 
-        listOf(EventDispatcher, ModuleManager, TickTasks, RenderBatchManager, TabListAPI, LocationAPI, MiningAPI).forEach { bus.subscribe(it) }
+        listOf(EventDispatcher, ModuleManager, TickTasks, RenderBatchManager, TabListAPI, LocationAPI, MiningAPI,
+            GardenAPI).forEach { bus.subscribe(it) }
     }
 }

@@ -10,8 +10,8 @@ import com.solidhax.apostle.ui.setting.BooleanSetting
 import com.solidhax.apostle.ui.setting.ColorSetting
 import com.solidhax.apostle.utils.drawTracer
 import com.solidhax.apostle.utils.drawWireFrameBox
-import com.solidhax.apostle.utils.getSkullTexture
 import com.solidhax.apostle.utils.renderPos
+import com.solidhax.apostle.utils.skullTexture
 import meteordevelopment.orbit.EventHandler
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -53,7 +53,7 @@ object PestESP : Module("Pest ESP", "ESP for pests in the garden.", Category.FAR
                 val entityHelmetSlot = e.getItemBySlot(EquipmentSlot.HEAD)
                 if(entityHelmetSlot.isEmpty || entityHelmetSlot.item != Items.PLAYER_HEAD) return@forEach
 
-                val skullTexture = getSkullTexture(entityHelmetSlot) ?: return@forEach
+                val skullTexture = entityHelmetSlot.skullTexture ?: return@forEach
                 if(skullTexture !in pestTextures) return@forEach
 
                 val pestName = pestTextures[skullTexture] ?: return@forEach

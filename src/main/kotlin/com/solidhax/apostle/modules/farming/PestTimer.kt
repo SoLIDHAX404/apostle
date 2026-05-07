@@ -4,7 +4,6 @@ import com.solidhax.apostle.Apostle.mc
 import com.solidhax.apostle.api.Island
 import com.solidhax.apostle.api.LocationAPI
 import com.solidhax.apostle.events.ChatPacketEvent
-import com.solidhax.apostle.events.TickEvent
 import com.solidhax.apostle.modules.internal.Category
 import com.solidhax.apostle.modules.internal.Module
 import com.solidhax.apostle.ui.setting.HudSetting
@@ -15,7 +14,7 @@ import meteordevelopment.orbit.EventHandler
 import java.awt.Color
 import java.util.regex.Pattern
 
-object PestTimer : Module(name = "Pest Timer", "A timer that shows when you can next spawn pests.", Category.FARMING) {
+object PestTimer : Module("Pest Timer", "A timer that shows when you can next spawn pests.", Category.FARMING) {
 
     private val onePestPattern = Pattern.compile(".*! A ൠ Pest has appeared in Plot - (?<plot>.*)!")
     private val multiplePestsPattern = Pattern.compile(".*! (?<amount>\\d) ൠ Pests? have spawned in Plot - (?<plot>.*)!")
