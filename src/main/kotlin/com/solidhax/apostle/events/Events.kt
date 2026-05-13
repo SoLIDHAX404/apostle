@@ -60,8 +60,3 @@ abstract class PacketEvent(val packet: Packet<*>) : CancellableEvent() {
 }
 
 class ChatPacketEvent(val value: String, val component: Component) : Event
-
-abstract class VisitorEvent(val visitor: String) : Event {
-    class VisitorAccepted(visitor: String) : VisitorEvent(visitor)
-    class VisitorRefused(visitor: String) : VisitorEvent(visitor)
-}

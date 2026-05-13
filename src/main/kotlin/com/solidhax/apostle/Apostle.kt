@@ -1,10 +1,10 @@
 package com.solidhax.apostle
 
-import com.solidhax.apostle.api.GardenAPI
 import com.solidhax.apostle.api.LocationAPI
 import com.solidhax.apostle.api.MiningAPI
 import com.solidhax.apostle.api.TabListAPI
 import com.solidhax.apostle.commands.mainCommand
+import com.solidhax.apostle.commands.pathfindingCommand
 import com.solidhax.apostle.events.EventDispatcher
 import com.solidhax.apostle.modules.internal.ModuleManager
 import com.solidhax.apostle.utils.RenderBatchManager
@@ -38,10 +38,9 @@ object Apostle : ClientModInitializer {
 
     override fun onInitializeClient() {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
-            arrayOf(mainCommand).forEach { commodore -> commodore.register(dispatcher) }
+            arrayOf(mainCommand, pathfindingCommand).forEach { commodore -> commodore.register(dispatcher) }
         }
 
-        listOf(EventDispatcher, ModuleManager, TickTasks, RenderBatchManager, TabListAPI, LocationAPI, MiningAPI,
-            GardenAPI).forEach { bus.subscribe(it) }
+        listOf(EventDispatcher, ModuleManager, TickTasks, RenderBatchManager, TabListAPI, LocationAPI, MiningAPI).forEach { bus.subscribe(it) }
     }
 }

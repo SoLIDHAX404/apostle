@@ -72,6 +72,13 @@ tasks.processResources {
     }
 }
 
+tasks.compileKotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+        freeCompilerArgs.add("-Xlambdas=class")
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
